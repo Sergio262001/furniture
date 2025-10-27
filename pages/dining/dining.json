@@ -1,0 +1,162 @@
+[
+  {
+    "id": 1,
+    "name": "Modern Dining Table",
+    "price": 450,
+    "seats": "4",
+    "type": "dining table",
+    "style": "modern",
+    "priceRange": "mid",
+    "images": [
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Rustic Farmhouse Set",
+    "price": 799,
+    "seats": "6",
+    "type": "dining set",
+    "style": "farmhouse",
+    "priceRange": "mid",
+    "images": [
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Classic Wooden Chair",
+    "price": 120,
+    "seats": "1",
+    "type": "chair",
+    "style": "classic",
+    "priceRange": "low",
+    "images": [
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Luxury Marble Dining Table",
+    "price": 1500,
+    "seats": "8",
+    "type": "dining table",
+    "style": "luxury",
+    "priceRange": "high",
+    "images": [
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Minimalist Dining Bench",
+    "price": 250,
+    "seats": "2",
+    "type": "bench",
+    "style": "minimalist",
+    "priceRange": "low",
+    "images": [
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp"
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Rustic Sideboard Cabinet",
+    "price": 600,
+    "seats": "",
+    "type": "sideboard",
+    "style": "rustic",
+    "priceRange": "mid",
+    "images": [
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp"
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Classic Buffet with Storage",
+    "price": 950,
+    "seats": "",
+    "type": "buffet",
+    "style": "classic",
+    "priceRange": "high",
+    "images": [
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp"
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Contemporary Bar Stool",
+    "price": 180,
+    "seats": "1",
+    "type": "bar stool",
+    "style": "modern",
+    "priceRange": "low",
+    "images": [
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp"
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Elegant Glass Dining Set",
+    "price": 1100,
+    "seats": "6",
+    "type": "dining set",
+    "style": "modern",
+    "priceRange": "high",
+    "images": [
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp"
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Farmhouse Wooden Dining Table",
+    "price": 700,
+    "seats": "6",
+    "type": "dining table",
+    "style": "farmhouse",
+    "priceRange": "mid",
+    "images": [
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp",
+      "/pages/dining/imgdining/dining1.webp"
+    ]
+  }
+]

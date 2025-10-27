@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product - Ashley Clone</title>
+
+  <!-- [ADD] BASE dinámico para GitHub Pages y local -->
+  <script>
+    (function () {
+      var REPO_SLUG = 'furniture';
+      var isGH = /github\.io$/i.test(location.hostname);
+      var base = document.createElement('base');
+      base.href = isGH ? '/' + REPO_SLUG + '/' : '/';
+      document.head.prepend(base);
+      if (isGH && !location.pathname.startsWith('/' + REPO_SLUG + '/')) {
+        location.replace('/' + REPO_SLUG + location.pathname + location.search + location.hash);
+      }
+    })();
+  </script>
+
+  <!-- [MOD] rutas base-relativas (sin ./) -->
+  <link rel="stylesheet" href="style.css" />
+  <script type="module" src="js/firebase.js"></script>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <div class="top-bar">
+    <div>📍 Furniture store in Fairfield, OH | 🚚 Delivering to <strong>0000</strong></div>
+    <div>
+      <!-- [MOD] rutas base-relativas -->
+      <a href="login.html" data-login-link>Login</a>
+      <a href="#" data-logout-link style="display:none" onclick="FB.logout()">Logout</a>
+      <a href="#" id="financing-btn">Financing</a>
+      <a href="#" id="help-btn">Help</a>
+      <a href="cart.html">🛒 (<span id="cart-count">0</span>)</a>
+      <span data-user-badge style="margin-left:8px;opacity:.8">Invitado</span>
+    </div>
+  </div>
+
+  <!-- Logo + search -->
+  <div class="header">
+    <div class="search-bar">
+      <input type="text" placeholder="Search products..." />
+    </div>
+    <div class="logo">
+      <!-- [MOD] rutas base-relativas -->
+      <a href="index.html"><img src="logo.jfif" alt="Ashley Logo" /></a>
+    </div>
+    <div>📞 Shop by phone 000-000-0000</div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav">
+    <!-- [MOD] rutas base-relativas -->
+    <a href="pages/livingroom/livingroom.html">LIVING ROOM</a>
+    <a href="pages/bedroom/bedroom.html">BEDROOM</a>
+    <a href="pages/dining/dining.html">DINING</a>
+    <a href="pages/mattresses/mattresses.html">MATTRESSES</a>
+    <a href="pages/outdoor/outdoor.html">OUTDOOR</a>
+    <a href="pages/kids/kids.html">BABY & KIDS</a>
+    <a href="pages/rugs/rugs.html">RUGS</a>
+    <a href="pages/accents/accents.html">ACCENTS & DECOR</a>
+  </div>
+
+  <!-- Product page -->
+  <main class="product-page">
+    <div class="gallery" id="gallery"></div>
+    <div class="details" id="details"></div>
+  </main>
+
+  <script>
+    // ===== Parámetros de URL (igual que tenías) =====
+    const params = new URLSearchParams(window.location.search);
+    const id = Number(params.get("id"));
+    const category = (params.get("cat") || "").trim().toLowerCase();
+    // [ADD] soporte opcional: json=pages/<cat>/<cat>.json
+    const jsonFromUrl = params.get("json");
+
+    // ===== Carrito (igual que tenías) =====
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let productoActual = null;
+
+    function getSafeQtySum(list) {
+      try { return list.reduce((sum, item) => sum + Number(item.quantity || item.cantidad || 0), 0); }
+      catch { return 0; }
+    }
+    function updateCartCount() {
+      const count = getSafeQtySum(cart);
+      const el = document.getElementById("cart-count");
+      if (el) el.textContent = count;
+    }
+
+    async function addToCart(product) {
+      if (!product) return;
+      const qty = Math.max(1, Number(document.getElementById("qty")?.value || 1));
+      const item = {
+        id: product.id,
+        name: product.name || "Unknown",
+        price: Number(product.price || 0),
+        image: (Array.isArray(product.images) && product.images[0]) || product.image || product.img || "",
+        quantity: qty
+      };
+      const useFirebase = window.FB && FB.auth && FB.auth.currentUser && typeof FB.addToCart === "function";
+      try {
+        if (useFirebase) {
+          await FB.addToCart(item);
+        } else {
+          const idx = cart.findIndex(p => String(p.id) === String(item.id));
+          if (idx !== -1) cart[idx].quantity = Number(cart[idx].quantity || 0) + item.quantity;
+          else cart.push(item);
+          localStorage.setItem("cart", JSON.stringify(cart));
+        }
+        if (!useFirebase) updateCartCount();
+        alert(item.name + " added to cart ✅");
+      } catch (e) {
+        console.error(e);
+        alert("Could not add to cart: " + (e.message || e));
+      }
+    }
+
+    function buyNow(product) {
+      addToCart(product);
+      window.location.href = "cart.html";
+    }
+
+    function changeImage(el) {
+      const main = document.getElementById('mainImage');
+      if (main) main.src = el.src;
+      document.querySelectorAll('.thumbnails img').forEach(img => img.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    // ===== Cargar JSON de la categoría (mínimo cambio) =====
+    if (!category && !jsonFromUrl) {
+      document.querySelector("main").innerHTML = "<p>Category missing.</p>";
+    } else {
+      // [MOD] si viene json=... úsalo; si no, usa pages/<cat>/<cat>.json
+      const jsonUrl = jsonFromUrl || `pages/${category}/${category}.json`;
+
+      fetch(jsonUrl)
+        .then(res => res.json())
+        .then(data => {
+          const product = (Array.isArray(data) ? data : []).find(p => Number(p.id) === id);
+          if (!product) {
+            document.querySelector("main").innerHTML = "<p>Product not found.</p>";
+            return;
+          }
+          productoActual = product;
+
+          // Galería (igual pero con fallback imagen)
+          const firstImg = (Array.isArray(product.images) && product.images[0]) || product.image || product.img || "";
+          let galleryHTML = `
+            <div id="mainImageContainer">
+              <img id="mainImage" src="${firstImg}" alt="${product.name || 'Product'}">
+            </div>
+            <div class="thumbnails">
+          `;
+          if (Array.isArray(product.images) && product.images.length) {
+            product.images.forEach((img, index) => {
+              galleryHTML += `<img src="${img}" class="${index===0?'active':''}" onclick="changeImage(this)">`;
+            });
+          }
+          galleryHTML += `</div>`;
+          document.getElementById("gallery").innerHTML = galleryHTML;
+
+          // Detalles (igual; back a la categoría)
+          document.getElementById("details").innerHTML = `
+            <h1>${product.name || "Unknown Product"}</h1>
+            <p class="price">$${Number(product.price || 0).toFixed(2)}</p>
+            <p class="description">${product.description || "No description available"}</p>
+
+            <div class="measurements">
+              <h3>Measurements</h3>
+              <p>${product.size || "Not specified"}</p>
+            </div>
+
+            <div class="options">
+              <label for="qty">Quantity:</label>
+              <input type="number" id="qty" value="1" min="1">
+
+              <div class="product-buttons">
+                <button class="add-cart" onclick="addToCart(productoActual)">🛒 Add to Cart</button>
+                <button class="buy-now" onclick="buyNow(productoActual)">⚡ Buy Now</button>
+                <a href="pages/${category}/${category}.html" class="continue-browsing">⬅ Continue Browsing</a>
+              </div>
+            </div>
+          `;
+        })
+        .catch(err => {
+          console.error("Error loading product:", err);
+          document.querySelector("main").innerHTML = "<p>Error loading product.</p>";
+        });
+    }
+
+    // Inicializa contador de carrito (igual)
+    window.addEventListener("load", () => {
+      cart = JSON.parse(localStorage.getItem("cart")) || [];
+      updateCartCount();
+    });
+    window.addEventListener("storage", (e) => {
+      if (e.key === "cart") {
+        cart = JSON.parse(localStorage.getItem("cart")) || [];
+        updateCartCount();
+      }
+    });
+  </script>
+
+  <!-- Scripts comunes -->
+  <script src="js/modals.js" defer></script>
+  <script src="js/chat-widget.js" defer></script>
+</body>
+</html>

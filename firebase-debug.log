@@ -1,0 +1,93 @@
+[debug] [2025-10-02T16:20:09.146Z] ----------------------------------------------------------------------
+[debug] [2025-10-02T16:20:09.149Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Blancito\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting --debug
+[debug] [2025-10-02T16:20:09.149Z] CLI Version:   14.17.0
+[debug] [2025-10-02T16:20:09.149Z] Platform:      win32
+[debug] [2025-10-02T16:20:09.150Z] Node Version:  v22.20.0
+[debug] [2025-10-02T16:20:09.150Z] Time:          Thu Oct 02 2025 12:20:09 GMT-0400 (Eastern Daylight Time)
+[debug] [2025-10-02T16:20:09.150Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-10-02T16:20:09.362Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-10-02T16:20:09.363Z] > authorizing via signed-in user (sagilt26@gmail.com)
+[debug] [2025-10-02T16:20:09.365Z] [iam] checking project great-value-prueba for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-10-02T16:20:09.366Z] Checked if tokens are valid: true, expires at: 1759423515625
+[debug] [2025-10-02T16:20:09.367Z] Checked if tokens are valid: true, expires at: 1759423515625
+[debug] [2025-10-02T16:20:09.368Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/great-value-prueba:testIamPermissions [none]
+[debug] [2025-10-02T16:20:09.368Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/great-value-prueba:testIamPermissions x-goog-quota-user=projects/great-value-prueba
+[debug] [2025-10-02T16:20:09.369Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/great-value-prueba:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-10-02T16:20:09.604Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/great-value-prueba:testIamPermissions 200
+[debug] [2025-10-02T16:20:09.604Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/great-value-prueba:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-10-02T16:20:09.605Z] Checked if tokens are valid: true, expires at: 1759423515625
+[debug] [2025-10-02T16:20:09.605Z] Checked if tokens are valid: true, expires at: 1759423515625
+[debug] [2025-10-02T16:20:09.606Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/great-value-prueba [none]
+[debug] [2025-10-02T16:20:09.938Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/great-value-prueba 200
+[debug] [2025-10-02T16:20:09.938Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/great-value-prueba {"projectId":"great-value-prueba","projectNumber":"993177703487","displayName":"great-value-prueba","name":"projects/great-value-prueba","resources":{"hostingSite":"great-value-prueba"},"state":"ACTIVE","etag":"1_4b18f85c-0438-4901-9950-f02cfc470ec4"}
+[info] 
+[info] === Deploying to 'great-value-prueba'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2025-10-02T16:20:09.945Z] Checked if tokens are valid: true, expires at: 1759423515625
+[debug] [2025-10-02T16:20:09.945Z] Checked if tokens are valid: true, expires at: 1759423515625
+[debug] [2025-10-02T16:20:09.946Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/great-value-prueba/versions [none]
+[debug] [2025-10-02T16:20:09.946Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/great-value-prueba/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2025-10-02T16:20:10.437Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/great-value-prueba/versions 200
+[debug] [2025-10-02T16:20:10.437Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/great-value-prueba/versions {"name":"projects/993177703487/sites/great-value-prueba/versions/5f0882a7a343c07a","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[great-value-prueba]: beginning deploy... 
+[info] i  hosting[great-value-prueba]: found 1 files in public 
+[debug] [2025-10-02T16:20:10.453Z] [hosting] uploading with 200 concurrency
+[debug] [2025-10-02T16:20:10.455Z] Checked if tokens are valid: true, expires at: 1759423515625
+[debug] [2025-10-02T16:20:10.455Z] Checked if tokens are valid: true, expires at: 1759423515625
+[debug] [2025-10-02T16:20:10.457Z] [hosting] hash cache [cHVibGlj] stored for 1 files
+[debug] [2025-10-02T16:20:10.457Z] [hosting][hash queue][FINAL] {"max":0,"min":0,"avg":0,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":3}
+[debug] [2025-10-02T16:20:10.458Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/993177703487/sites/great-value-prueba/versions/5f0882a7a343c07a:populateFiles [none]
+[debug] [2025-10-02T16:20:10.458Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/993177703487/sites/great-value-prueba/versions/5f0882a7a343c07a:populateFiles {"files":{"/index.html":"617d7027655486348f5e5e44dfa9ad461329ab8dd84515aff4245d5a28e03041"}}
+[debug] [2025-10-02T16:20:10.627Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/993177703487/sites/great-value-prueba/versions/5f0882a7a343c07a:populateFiles 200
+[debug] [2025-10-02T16:20:10.628Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/993177703487/sites/great-value-prueba/versions/5f0882a7a343c07a:populateFiles {"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/great-value-prueba/versions/5f0882a7a343c07a/files"}
+[debug] [2025-10-02T16:20:10.629Z] [hosting][populate queue][FINAL] {"max":174,"min":174,"avg":174,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":174}
+[debug] [2025-10-02T16:20:10.629Z] [hosting] uploads queued: 0
+[debug] [2025-10-02T16:20:10.630Z] [hosting][upload queue][FINAL] {"max":0,"min":9999999999,"avg":0,"active":0,"complete":0,"success":0,"errored":0,"retried":0,"total":0,"elapsed":1759422010630}
+[info] i  hosting: upload complete 
+[info] +  hosting[great-value-prueba]: file upload complete 
+[debug] [2025-10-02T16:20:10.631Z] [hosting] deploy completed after 190ms
+[debug] [2025-10-02T16:20:10.632Z] [
+  {
+    "config": {
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "site": "great-value-prueba"
+    },
+    "version": "projects/993177703487/sites/great-value-prueba/versions/5f0882a7a343c07a"
+  }
+]
+[info] i  hosting[great-value-prueba]: finalizing version... 
+[debug] [2025-10-02T16:20:10.634Z] Checked if tokens are valid: true, expires at: 1759423515625
+[debug] [2025-10-02T16:20:10.634Z] Checked if tokens are valid: true, expires at: 1759423515625
+[debug] [2025-10-02T16:20:10.635Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/great-value-prueba/versions/5f0882a7a343c07a updateMask=status%2Cconfig
+[debug] [2025-10-02T16:20:10.635Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/great-value-prueba/versions/5f0882a7a343c07a {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]}}
+[debug] [2025-10-02T16:20:10.787Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/great-value-prueba/versions/5f0882a7a343c07a 200
+[debug] [2025-10-02T16:20:10.787Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/great-value-prueba/versions/5f0882a7a343c07a {"name":"projects/993177703487/sites/great-value-prueba/versions/5f0882a7a343c07a","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2025-10-02T16:20:10.798976Z","createUser":{"email":"sagilt26@gmail.com"},"finalizeTime":"2025-10-02T16:20:11.349502Z","finalizeUser":{"email":"sagilt26@gmail.com"}}
+[debug] [2025-10-02T16:20:10.788Z] [hosting] finalized version for great-value-prueba:[object Object]
+[info] +  hosting[great-value-prueba]: version finalized 
+[info] i  hosting[great-value-prueba]: releasing new version... 
+[debug] [2025-10-02T16:20:10.789Z] Checked if tokens are valid: true, expires at: 1759423515625
+[debug] [2025-10-02T16:20:10.789Z] Checked if tokens are valid: true, expires at: 1759423515625
+[debug] [2025-10-02T16:20:10.790Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/great-value-prueba/channels/live/releases versionName=projects%2F993177703487%2Fsites%2Fgreat-value-prueba%2Fversions%2F5f0882a7a343c07a
+[debug] [2025-10-02T16:20:10.791Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/great-value-prueba/channels/live/releases {}
+[debug] [2025-10-02T16:20:10.958Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/great-value-prueba/channels/live/releases 200
+[debug] [2025-10-02T16:20:10.958Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/great-value-prueba/channels/live/releases {"name":"projects/993177703487/sites/great-value-prueba/channels/live/releases/1759422010961000","version":{"name":"projects/993177703487/sites/great-value-prueba/versions/5f0882a7a343c07a","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2025-10-02T16:20:10.798976Z","createUser":{"email":"sagilt26@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKjpFwa8CAQ9BUpGBqDPId70pTQN9von-FjCUKyak5HN00yvQ=mo"},"finalizeTime":"2025-10-02T16:20:11.349502Z","finalizeUser":{"email":"sagilt26@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKjpFwa8CAQ9BUpGBqDPId70pTQN9von-FjCUKyak5HN00yvQ=mo"}},"type":"DEPLOY","releaseTime":"2025-10-02T16:20:10.961Z","releaseUser":{"email":"sagilt26@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKjpFwa8CAQ9BUpGBqDPId70pTQN9von-FjCUKyak5HN00yvQ=mo"}}
+[debug] [2025-10-02T16:20:10.960Z] [hosting] release: {"name":"projects/993177703487/sites/great-value-prueba/channels/live/releases/1759422010961000","version":{"name":"projects/993177703487/sites/great-value-prueba/versions/5f0882a7a343c07a","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2025-10-02T16:20:10.798976Z","createUser":{"email":"sagilt26@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKjpFwa8CAQ9BUpGBqDPId70pTQN9von-FjCUKyak5HN00yvQ=mo"},"finalizeTime":"2025-10-02T16:20:11.349502Z","finalizeUser":{"email":"sagilt26@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKjpFwa8CAQ9BUpGBqDPId70pTQN9von-FjCUKyak5HN00yvQ=mo"}},"type":"DEPLOY","releaseTime":"2025-10-02T16:20:10.961Z","releaseUser":{"email":"sagilt26@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKjpFwa8CAQ9BUpGBqDPId70pTQN9von-FjCUKyak5HN00yvQ=mo"}}
+[info] +  hosting[great-value-prueba]: release complete 
+[info] 
+[info] +  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/great-value-prueba/overview
+[info] Hosting URL: https://great-value-prueba.web.app

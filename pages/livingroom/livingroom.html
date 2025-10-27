@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Living Room</title>
+
+  <!-- Rutas relativas seguras -->
+  <link rel="stylesheet" href="../../style.css" />
+
+  <!-- Firebase helpers -->
+  <script type="module" src="../../js/firebase.js"></script>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <div class="top-bar">
+    <div>📍 Furniture store in Fairfield, OH | 🚚 Delivering to <strong>0000</strong></div>
+    <div>
+      <a href="../../login.html" data-login-link>Login</a>
+      <a href="#" data-logout-link style="display:none" onclick="FB.logout()">Logout</a>
+      <a href="#" id="financing-btn">Financing</a>
+      <a href="#" id="help-btn">Help</a>
+      <a href="../../cart.html">🛒 (<span id="cart-count">0</span>)</a>
+      <span data-user-badge style="margin-left:8px;opacity:.8">Invitado</span>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search living rooms...">
+    </div>
+    <div class="logo">
+      <a href="../../index.html"><img src="../../logo.jfif" alt="Logo"></a>
+    </div>
+    <div>📞 Shop by phone 000-000-0000</div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav">
+    <a class="active" href="../livingroom/livingroom.html">LIVING ROOM</a>
+    <a href="../bedroom/bedroom.html">BEDROOM</a>
+    <a href="../dining/dining.html">DINING</a>
+    <a href="../mattresses/mattresses.html">MATTRESSES</a>
+    <a href="../outdoor/outdoor.html">OUTDOOR</a>
+    <a href="../kids/kids.html">BABY & KIDS</a>
+    <a href="../rugs/rugs.html">RUGS</a>
+    <a href="../accents/accents.html">ACCENTS & DECOR</a>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <button id="filter-toggle" class="filter-toggle" onclick="toggleFilters()">☰ Filters</button>
+
+    <aside id="filters" class="filters">
+      <div class="filters-header">
+        <strong>Filters</strong>
+        <button class="filters-close-btn" type="button" aria-label="Close">✕</button>
+      </div>
+
+      <h3>Filters</h3>
+
+      <label>Min Price:</label>
+      <input type="number" id="minPriceFilter" placeholder="e.g. 100">
+
+      <label>Max Price:</label>
+      <input type="number" id="maxPriceFilter" placeholder="e.g. 1000">
+
+      <label>Material:</label>
+      <select id="materialFilter">
+        <option value="">All</option>
+        <option value="wood">Wood</option>
+        <option value="metal">Metal</option>
+        <option value="fabric">Fabric</option>
+        <option value="leather">Leather</option>
+      </select>
+
+      <label>Color:</label>
+      <select id="colorFilter">
+        <option value="">All</option>
+        <option value="gray">Gray</option>
+        <option value="black">Black</option>
+        <option value="white">White</option>
+        <option value="brown">Brown</option>
+      </select>
+
+      <label>Type:</label>
+      <select id="typeFilter">
+        <option value="">All</option>
+        <option value="sofa">Sofa</option>
+        <option value="loveseat">Loveseat</option>
+        <option value="sectional">Sectional</option>
+        <option value="recliner">Recliner</option>
+        <option value="ottoman">Ottoman</option>
+      </select>
+
+      <label>Size:</label>
+      <select id="sizeFilter">
+        <option value="">All</option>
+        <option value="small">Small</option>
+        <option value="medium">Medium</option>
+        <option value="large">Large</option>
+      </select>
+
+      <label>Reclining:</label>
+      <select id="recliningFilter">
+        <option value="">All</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+
+      <label>Accessories:</label>
+      <select id="accessoriesFilter">
+        <option value="">All</option>
+        <option value="led">LED Lights</option>
+        <option value="speakers">Speakers</option>
+        <option value="usb">USB Ports</option>
+        <option value="cupholder">Cup Holders</option>
+      </select>
+
+      <button onclick="applyFilters()">Apply Filters</button>
+    </aside>
+
+    <div class="products" id="products"></div>
+  </div>
+
+  <div class="chat">💬 Chat With Us</div>
+
+  <!-- Scripts comunes -->
+  <script src="../../js/modals.js" defer></script>
+  <script src="../../js/chat-widget.js" defer></script>
+
+  <!-- Script principal -->
+  <script>
+    // Helpers
+    const escapeHtml = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const normalizeImage = (p) => {
+      if (!p) return "../../imgpromo/placeholder.jpg";
+      if (/^https?:\/\//i.test(p)) return p;
+      if (p.startsWith("../../")) return p;
+      // esta página vive en /pages/livingroom/ — subimos dos niveles
+      return "../../" + p.replace(/^\/+/, "");
+    };
+
+    // Cargar data
+    fetch('livingroom.json')
+      .then(res => {
+        if (!res.ok) throw new Error("Could not load livingroom.json");
+        return res.json();
+      })
+      .then(data => {
+        const container = document.getElementById("products");
+
+        function hrefFor(prod) {
+          // usar product.html estándar
+          return '../../producto.html?id=' + encodeURIComponent(prod.id) + '&cat=livingroom';
+        }
+
+        function renderProducts(list) {
+          container.innerHTML = "";
+          if (!list?.length) {
+            container.innerHTML = "<p class='no-results'>No products found.</p>";
+            return;
+          }
+
+          list.forEach(prod => {
+            const img0 = normalizeImage(Array.isArray(prod.images) && prod.images.length ? prod.images[0] : "");
+            const name = prod.name || "";
+            const price = Number(prod.price || 0);
+
+            const card = document.createElement("div");
+            card.className = "product-card";
+            card.innerHTML = `
+              <a href="${hrefFor(prod)}">
+                <img src="${escapeHtml(img0)}" alt="${escapeHtml(name)}">
+                <h3>${escapeHtml(name)}</h3>
+                <p>$${price.toFixed(2)}</p>
+              </a>
+              <button class="buy-btn"
+                      data-id="${escapeHtml(String(prod.id))}"
+                      data-name="${escapeHtml(name)}"
+                      data-price="${price}"
+                      data-image="${escapeHtml(img0)}">🛒 Buy</button>
+            `;
+            container.appendChild(card);
+          });
+        }
+
+        renderProducts(data);
+
+        // Búsqueda
+        document.getElementById("searchInput").addEventListener("input", e => {
+          const text = (e.target.value || "").toLowerCase();
+          const filtered = !text ? data : data.filter(p =>
+            (p.name && p.name.toLowerCase().includes(text)) ||
+            (p.description && p.description.toLowerCase().includes(text))
+          );
+          renderProducts(filtered);
+        });
+
+        // Filtros
+        function applyFilters() {
+          const minPrice = parseFloat(document.getElementById("minPriceFilter").value) || 0;
+          const maxPrice = parseFloat(document.getElementById("maxPriceFilter").value) || Infinity;
+          const material = document.getElementById("materialFilter").value.toLowerCase();
+          const color    = document.getElementById("colorFilter").value.toLowerCase();
+          const type     = document.getElementById("typeFilter").value.toLowerCase();
+          const size     = document.getElementById("sizeFilter").value.toLowerCase();
+          const reclining = document.getElementById("recliningFilter").value.toLowerCase();
+          const accessories = document.getElementById("accessoriesFilter").value.toLowerCase();
+
+          const filtered = data.filter(p =>
+            Number(p.price || 0) >= minPrice &&
+            Number(p.price || 0) <= maxPrice &&
+            (material === "" || (p.material && String(p.material).toLowerCase() === material)) &&
+            (color === ""    || (p.color && String(p.color).toLowerCase() === color)) &&
+            (type === ""     || (p.type && String(p.type).toLowerCase() === type)) &&
+            (size === ""     || (p.size && String(p.size).toLowerCase() === size)) &&
+            (reclining === "" ||
+              (reclining === "yes" && !!p.reclining) ||
+              (reclining === "no"  && !p.reclining)) &&
+            (accessories === "" ||
+              (Array.isArray(p.accessories) && p.accessories.some(a => String(a || "").toLowerCase() === accessories)))
+          );
+
+          renderProducts(filtered);
+        }
+
+        function toggleFilters() {
+          document.getElementById("filters").classList.toggle("open");
+        }
+
+        // Exponer para onclicks del HTML
+        window.applyFilters = applyFilters;
+        window.toggleFilters = toggleFilters;
+
+        // Delegación para botones Buy
+        container.addEventListener("click", e => {
+          if (e.target.matches(".buy-btn")) {
+            const btn = e.target;
+            addToCart(btn.dataset.id, btn.dataset.name, Number(btn.dataset.price), btn.dataset.image);
+          }
+        });
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById("products").innerHTML =
+          "<p style='padding:20px;color:#c00'>Error loading products. Check console.</p>";
+      });
+
+    // Carrito: Firebase si hay sesión; si no, localStorage
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function updateCartCount() {
+      const el = document.getElementById("cart-count");
+      if (el) el.textContent = (cart || []).reduce((s, i) => s + Number(i.quantity || 0), 0);
+    }
+
+    function lsSet(items) {
+      localStorage.setItem("cart", JSON.stringify(items));
+      updateCartCount();
+    }
+
+    async function addToCart(id, name, price, image) {
+      const item = { id, name, price: Number(price || 0), image: image || "", quantity: 1 };
+      const useFirebase = window.FB && FB.auth && FB.auth.currentUser && typeof FB.addToCart === "function";
+      try {
+        if (useFirebase) {
+          await FB.addToCart(item);
+        } else {
+          const found = cart.find(p => String(p.id) === String(id));
+          if (found) found.quantity = Number(found.quantity || 0) + 1;
+          else cart.push(item);
+          lsSet(cart);
+        }
+        if (!useFirebase) updateCartCount();
+        alert(name + " added to cart ✅");
+      } catch (e) {
+        console.error(e);
+        alert("Could not add to cart: " + (e.message || e));
+      }
+    }
+
+    window.onload = updateCartCount;
+    window.addEventListener("storage", (e) => {
+      if (e.key === "cart") {
+        cart = JSON.parse(localStorage.getItem("cart")) || [];
+        updateCartCount();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dining</title>
+
+  <link rel="stylesheet" href="../../style.css" />
+  <!-- Firebase helpers -->
+  <script type="module" src="../../js/firebase.js"></script>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div>📍 Furniture store in Fairfield, OH | 🚚 Delivering to <strong>0000</strong></div>
+    <div>
+      <a href="../../login.html" data-login-link>Login</a>
+      <a href="#" data-logout-link style="display:none" onclick="FB.logout()">Logout</a>
+      <a href="#" id="financing-btn">Financing</a>
+      <a href="#" id="help-btn">Help</a>
+      <a href="../../cart.html">🛒 (<span id="cart-count">0</span>)</a>
+      <span data-user-badge style="margin-left:8px;opacity:.8">Invitado</span>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search dining products..." />
+    </div>
+    <div class="logo">
+      <a href="../../index.html"><img src="../../logo.jfif" alt="Logo" /></a>
+    </div>
+    <div>📞 Shop by phone 000-000-0000</div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav">
+    <a href="../livingroom/livingroom.html">LIVING ROOM</a>
+    <a href="../bedroom/bedroom.html">BEDROOM</a>
+    <a class="active" href="../dining/dining.html">DINING</a>
+    <a href="../mattresses/mattresses.html">MATTRESSES</a>
+    <a href="../outdoor/outdoor.html">OUTDOOR</a>
+    <a href="../kids/kids.html">BABY & KIDS</a>
+    <a href="../rugs/rugs.html">RUGS</a>
+    <a href="../accents/accents.html">ACCENTS & DECOR</a>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <button id="filter-toggle" class="filter-toggle" onclick="toggleFilters()">☰ Filters</button>
+
+    <aside id="filters" class="filters">
+      <div class="filters-header">
+        <strong>Filters</strong>
+        <button class="filters-close-btn" type="button" aria-label="Close">✕</button>
+      </div>
+
+      <h3>Filters</h3>
+
+      <label for="minPriceFilter">Min Price:</label>
+      <input type="number" id="minPriceFilter" placeholder="e.g. 100" />
+
+      <label for="maxPriceFilter">Max Price:</label>
+      <input type="number" id="maxPriceFilter" placeholder="e.g. 2000" />
+
+      <label for="seatsFilter">Seats:</label>
+      <select id="seatsFilter">
+        <option value="">All</option>
+        <option value="2">2</option>
+        <option value="4">4</option>
+        <option value="6">6</option>
+        <option value="8">8</option>
+        <option value="10">10</option>
+      </select>
+
+      <label for="typeFilter">Type:</label>
+      <select id="typeFilter">
+        <option value="">All</option>
+        <option value="dining table">Dining Table</option>
+        <option value="dining set">Dining Set</option>
+        <option value="chair">Chair</option>
+        <option value="bench">Bench</option>
+        <option value="bar stool">Bar Stool</option>
+        <option value="sideboard">Sideboard</option>
+        <option value="buffet">Buffet</option>
+      </select>
+
+      <label for="styleFilter">Style:</label>
+      <select id="styleFilter">
+        <option value="">All</option>
+        <option value="modern">Modern</option>
+        <option value="rustic">Rustic</option>
+        <option value="classic">Classic</option>
+        <option value="farmhouse">Farmhouse</option>
+        <option value="luxury">Luxury</option>
+      </select>
+
+      <label for="priceRangeFilter">Price range:</label>
+      <select id="priceRangeFilter">
+        <option value="">All</option>
+        <option value="low">Under $300</option>
+        <option value="mid">$300 - $800</option>
+        <option value="high">Over $800</option>
+      </select>
+
+      <button onclick="applyFilters()">Apply Filters</button>
+    </aside>
+
+    <div class="products" id="products"></div>
+  </div>
+
+  <div class="chat">💬 Chat With Us</div>
+
+  <script>
+    // Helpers para datos
+    const get = (o, en, es, fallback) => (o ? (o[en] ?? o[es] ?? fallback) : fallback);
+    const escapeHtml = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const priceRangeFromPrice = (price) => (price < 300 ? "low" : price <= 800 ? "mid" : "high");
+
+    let DATA = [];
+
+    // Cargar datos
+    fetch("dining.json")
+      .then(res => { if (!res.ok) throw new Error("Could not load dining.json"); return res.json(); })
+      .then(data => {
+        DATA = Array.isArray(data) ? data : [];
+        renderProducts(DATA);
+        document.getElementById("searchInput").addEventListener("input", applyFilters);
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById("products").innerHTML =
+          "<p style='padding:20px;color:#c00'>Error loading products. Check console.</p>";
+      });
+
+    function renderProducts(list) {
+      const container = document.getElementById("products");
+      container.innerHTML = "";
+      if (!list?.length) {
+        container.innerHTML = "<p class='no-results'>No products found.</p>";
+        return;
+      }
+
+      list.forEach(prod => {
+        const id = get(prod, "id", "id", "");
+        const name = get(prod, "name", "nombre", "No name");
+        const price = Number(get(prod, "price", "precio", 0));
+        const images = get(prod, "images", "imagenes", null) || [];
+        const image = Array.isArray(images) && images.length ? images[0] : "../../imgpromo/placeholder.jpg";
+
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <a href="../../producto.html?id=${encodeURIComponent(id)}&cat=dining">
+            <img src="${escapeHtml(image)}" alt="${escapeHtml(name)}">
+            <h3>${escapeHtml(name)}</h3>
+            <p>$${price.toFixed(2)}</p>
+          </a>
+          <button class="buy-btn"
+                  data-id="${escapeHtml(id)}"
+                  data-name="${escapeHtml(name)}"
+                  data-price="${price}"
+                  data-image="${escapeHtml(image)}">🛒 Buy</button>
+        `;
+        container.appendChild(card);
+      });
+
+      container.addEventListener("click", e => {
+        if (e.target.matches(".buy-btn")) {
+          const btn = e.target;
+          addToCart(btn.dataset.id, btn.dataset.name, Number(btn.dataset.price), btn.dataset.image);
+        }
+      });
+    }
+
+    function applyFilters() {
+      const min = parseFloat(document.getElementById("minPriceFilter").value) || 0;
+      const max = parseFloat(document.getElementById("maxPriceFilter").value) || Infinity;
+      const seatsFilter = document.getElementById("seatsFilter").value.trim().toLowerCase();
+      const typeFilter = document.getElementById("typeFilter").value.toLowerCase();
+      const styleFilter = document.getElementById("styleFilter").value.toLowerCase();
+      const priceRangeFilter = document.getElementById("priceRangeFilter").value.toLowerCase();
+      const searchText = document.getElementById("searchInput").value.trim().toLowerCase();
+
+      const filtered = DATA.filter(p => {
+        const price = Number(get(p, "price", "precio", 0));
+        if (isNaN(price) || price < min || price > max) return false;
+
+        const seatsVal = get(p, "seats", "puestos", "");
+        const seats = seatsVal == null ? "" : String(seatsVal).toLowerCase();
+        const type = String(get(p, "type", "tipo", "")).toLowerCase();
+        const style = String(get(p, "style", "estilo", "")).toLowerCase();
+        const pr = String(get(p, "priceRange", "price_range", "") || priceRangeFromPrice(price)).toLowerCase();
+
+        if (seatsFilter && seatsFilter !== seats) return false;
+        if (typeFilter && typeFilter !== type) return false;
+        if (styleFilter && styleFilter !== style) return false;
+        if (priceRangeFilter && priceRangeFilter !== pr) return false;
+
+        if (searchText) {
+          const name = String(get(p, "name", "nombre", "")).toLowerCase();
+          const description = String(get(p, "description", "descripcion", "")).toLowerCase();
+          if (!name.includes(searchText) && !description.includes(searchText)) return false;
+        }
+        return true;
+      });
+
+      renderProducts(filtered);
+    }
+
+    function toggleFilters() {
+      document.getElementById("filters").classList.toggle("open");
+    }
+    window.toggleFilters = toggleFilters;
+    window.applyFilters = applyFilters;
+
+    // ===== Carrito: Firebase si hay sesión, sino localStorage =====
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function updateCartCount() {
+      const el = document.getElementById("cart-count");
+      if (el) el.textContent = (cart || []).reduce((s, i) => s + Number(i.quantity || 0), 0);
+    }
+    function lsSet(items) {
+      localStorage.setItem("cart", JSON.stringify(items));
+      updateCartCount();
+    }
+
+    async function addToCart(id, name, price, image) {
+      const item = { id, name, price: Number(price || 0), image: image || "", quantity: 1 };
+      const useFirebase = window.FB && FB.auth && FB.auth.currentUser && typeof FB.addToCart === "function";
+      try {
+        if (useFirebase) {
+          await FB.addToCart(item);
+        } else {
+          const found = cart.find(p => String(p.id) === String(id));
+          if (found) found.quantity = Number(found.quantity || 0) + 1;
+          else cart.push(item);
+          lsSet(cart);
+        }
+        if (!useFirebase) updateCartCount();
+        alert(name + " added to cart ✅");
+      } catch (e) {
+        console.error(e);
+        alert("Could not add to cart: " + (e.message || e));
+      }
+    }
+
+    window.onload = updateCartCount;
+    window.addEventListener("storage", (e) => {
+      if (e.key === "cart") {
+        cart = JSON.parse(localStorage.getItem("cart")) || [];
+        updateCartCount();
+      }
+    });
+  </script>
+
+  <!-- Scripts comunes -->
+  <script src="../../js/modals.js" defer></script>
+  <script src="../../js/chat-widget.js" defer></script>
+
+  <!-- UX filtros (overlay, ESC, autocerrar) -->
+  <script>
+    (function () {
+      const panel = document.getElementById('filters');
+      if (!panel) return;
+
+      let overlay = panel.nextElementSibling;
+      if (!(overlay && overlay.classList.contains('filters-overlay'))) {
+        const stray = document.querySelector('.filters-overlay');
+        if (stray && stray !== overlay) stray.remove();
+        overlay = document.createElement('div');
+        overlay.className = 'filters-overlay';
+        panel.parentNode.insertBefore(overlay, panel.nextElementSibling);
+      }
+
+      if (!panel.querySelector('.filters-header')) {
+        const header = document.createElement('div');
+        header.className = 'filters-header';
+        header.innerHTML = '<strong>Filters</strong><button class="filters-close-btn" type="button" aria-label="Close">✕</button>';
+        panel.insertBefore(header, panel.firstChild);
+      }
+      const closeBtn = panel.querySelector('.filters-close-btn');
+
+      function sync() {
+        const open = panel.classList.contains('open');
+        document.body.classList.toggle('body-no-scroll', open);
+        overlay.style.display = open ? 'block' : 'none';
+        if (open && window.matchMedia('(max-width:768px)').matches) panel.style.left = '0';
+        if (!open && panel.style.left === '0px') panel.style.left = '';
+      }
+
+      const originalToggle = window.toggleFilters;
+      window.toggleFilters = function () {
+        if (originalToggle) originalToggle(); else panel.classList.toggle('open');
+        sync();
+      };
+
+      closeBtn && closeBtn.addEventListener('click', () => { panel.classList.remove('open'); sync(); });
+      overlay.addEventListener('click', () => { panel.classList.remove('open'); sync(); });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && panel.classList.contains('open')) { panel.classList.remove('open'); sync(); }
+      });
+
+      const applyBtn = panel.querySelector("button[onclick*='applyFilters']");
+      if (applyBtn && !applyBtn.__wired) {
+        applyBtn.addEventListener('click', () => setTimeout(() => { panel.classList.remove('open'); sync(); }, 0));
+        applyBtn.__wired = true;
+      }
+    })();
+  </script>
+</body>
+</html>

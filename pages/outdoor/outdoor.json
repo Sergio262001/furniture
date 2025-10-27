@@ -1,0 +1,172 @@
+[
+  {
+    "id": 1,
+    "name": "Outdoor Patio Set with Cushions",
+    "price": 799,
+    "material": "rattan",
+    "color": "brown",
+    "pieces": 4,
+    "weather_resistant": true,
+    "images": [
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp"
+    ],
+    "description": "4-piece rattan outdoor set with weather-resistant cushions."
+  },
+  {
+    "id": 2,
+    "name": "Metal Garden Table with Umbrella",
+    "price": 299,
+    "material": "metal",
+    "color": "black",
+    "pieces": 2,
+    "weather_resistant": true,
+    "images": [
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp"
+    ],
+    "description": "Durable black garden table with umbrella for outdoor dining."
+  },
+  {
+    "id": 3,
+    "name": "Hammock with Wooden Stand",
+    "price": 249,
+    "material": "fabric",
+    "color": "beige",
+    "pieces": 1,
+    "weather_resistant": false,
+    "images": [
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp"
+    ],
+    "description": "Relaxing beige hammock with solid wooden stand."
+  },
+  {
+    "id": 4,
+    "name": "Outdoor Fire Pit Table",
+    "price": 399,
+    "material": "metal",
+    "color": "gray",
+    "pieces": 1,
+    "weather_resistant": true,
+    "images": [
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp"
+    ],
+    "description": "Gray outdoor fire pit table with modern design."
+  },
+  {
+    "id": 5,
+    "name": "Wooden Picnic Bench",
+    "price": 199,
+    "material": "wood",
+    "color": "natural",
+    "pieces": 1,
+    "weather_resistant": true,
+    "images": [
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp"
+    ],
+    "description": "Classic wooden picnic bench for gardens and patios."
+  },
+  {
+    "id": 6,
+    "name": "Plastic Folding Chairs Set",
+    "price": 149,
+    "material": "plastic",
+    "color": "white",
+    "pieces": 4,
+    "weather_resistant": true,
+    "images": [
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp"
+    ],
+    "description": "Lightweight white folding chairs perfect for outdoor use."
+  },
+  {
+    "id": 7,
+    "name": "Wicker Lounge Chair",
+    "price": 349,
+    "material": "wicker",
+    "color": "brown",
+    "pieces": 1,
+    "weather_resistant": true,
+    "images": [
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp"
+    ],
+    "description": "Comfortable wicker lounge chair with soft cushions."
+  },
+  {
+    "id": 8,
+    "name": "Outdoor Storage Box",
+    "price": 179,
+    "material": "plastic",
+    "color": "gray",
+    "pieces": 1,
+    "weather_resistant": true,
+    "images": [
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp"
+    ],
+    "description": "Weather-resistant storage box for garden essentials."
+  },
+  {
+    "id": 9,
+    "name": "Patio Umbrella with Base",
+    "price": 220,
+    "material": "fabric",
+    "color": "red",
+    "pieces": 2,
+    "weather_resistant": true,
+    "images": [
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp"
+    ],
+    "description": "Large red patio umbrella with sturdy base."
+  },
+  {
+    "id": 10,
+    "name": "Garden Swing Chair",
+    "price": 459,
+    "material": "metal",
+    "color": "white",
+    "pieces": 1,
+    "weather_resistant": false,
+    "images": [
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp",
+      "/pages/outdoor/imgoutdoor/outdoor1.webp"
+    ],
+    "description": "Elegant white garden swing chair for relaxing outdoors."
+  }
+]

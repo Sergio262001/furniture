@@ -1,0 +1,172 @@
+[
+  {
+    "id": 1,
+    "name": "Bunk Bed with Ladder",
+    "price": 599,
+    "size": "twin",
+    "material": "wood",
+    "color": "white",
+    "safety_features": ["guardrails", "ladder"],
+    "images": [
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp"
+    ],
+    "description": "White wooden bunk bed with safety guardrails and ladder."
+  },
+  {
+    "id": 2,
+    "name": "Toddler Race Car Bed",
+    "price": 349,
+    "size": "toddler",
+    "material": "plastic",
+    "color": "red",
+    "safety_features": ["low height"],
+    "images": [
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp"
+    ],
+    "description": "Fun red race car bed designed for toddlers."
+  },
+  {
+    "id": 3,
+    "name": "Kids Study Desk with Chair",
+    "price": 249,
+    "size": "medium",
+    "material": "wood",
+    "color": "pink",
+    "safety_features": ["rounded corners"],
+    "images": [
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp"
+    ],
+    "description": "Compact pink desk and chair set with rounded safety edges."
+  },
+  {
+    "id": 4,
+    "name": "Toy Storage Organizer",
+    "price": 129,
+    "size": "small",
+    "material": "wood",
+    "color": "multicolor",
+    "safety_features": ["lightweight"],
+    "images": [
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp"
+    ],
+    "description": "Colorful toy organizer with multiple bins."
+  },
+  {
+    "id": 5,
+    "name": "Convertible Crib with Storage",
+    "price": 499,
+    "size": "crib",
+    "material": "wood",
+    "color": "gray",
+    "safety_features": ["non-toxic finish", "adjustable mattress height"],
+    "images": [
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp"
+    ],
+    "description": "Gray convertible crib with under-bed storage and safe finishes."
+  },
+  {
+    "id": 6,
+    "name": "Kids Bookshelf with Animal Design",
+    "price": 179,
+    "size": "small",
+    "material": "wood",
+    "color": "blue",
+    "safety_features": ["rounded corners"],
+    "images": [
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp"
+    ],
+    "description": "Fun animal-themed kids bookshelf with safe rounded edges."
+  },
+  {
+    "id": 7,
+    "name": "Kids Play Table with Chairs",
+    "price": 229,
+    "size": "medium",
+    "material": "plastic",
+    "color": "green",
+    "safety_features": ["lightweight", "rounded corners"],
+    "images": [
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp"
+    ],
+    "description": "Durable kids play table with two matching chairs."
+  },
+  {
+    "id": 8,
+    "name": "Toddler Rocking Chair",
+    "price": 99,
+    "size": "toddler",
+    "material": "wood",
+    "color": "natural wood",
+    "safety_features": ["smooth edges"],
+    "images": [
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp"
+    ],
+    "description": "Sturdy wooden rocking chair designed for toddlers."
+  },
+  {
+    "id": 9,
+    "name": "Kids Bean Bag Chair",
+    "price": 89,
+    "size": "small",
+    "material": "fabric",
+    "color": "purple",
+    "safety_features": ["child-safe zipper"],
+    "images": [
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp"
+    ],
+    "description": "Comfortable and lightweight purple bean bag chair for kids."
+  },
+  {
+    "id": 10,
+    "name": "Play Tent with Stars",
+    "price": 159,
+    "size": "large",
+    "material": "fabric",
+    "color": "multicolor",
+    "safety_features": ["fire-retardant fabric"],
+    "images": [
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp",
+      "/pages/kids/imgkids/kids1.webp"
+    ],
+    "description": "Magical multicolor play tent with star design for kids."
+  }
+]

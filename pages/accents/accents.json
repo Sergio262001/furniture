@@ -1,0 +1,172 @@
+[
+  {
+    "id": 1,
+    "name": "Modern Wall Mirror",
+    "description": "Sleek rectangular mirror with a black metal frame.",
+    "price": 129,
+    "type": "mirror",
+    "material": "metal",
+    "color": "black",
+    "style": "modern",
+    "images": [
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Golden Sunburst Clock",
+    "description": "Statement wall clock with golden sunburst design.",
+    "price": 89,
+    "type": "clock",
+    "material": "metal",
+    "color": "gold",
+    "style": "bohemian",
+    "images": [
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Ceramic Table Lamp",
+    "description": "White ceramic lamp with fabric shade, perfect for side tables.",
+    "price": 75,
+    "type": "lamp",
+    "material": "ceramic",
+    "color": "white",
+    "style": "minimalist",
+    "images": [
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Rustic Wooden Vase",
+    "description": "Tall wooden vase for dried flowers or branches.",
+    "price": 59,
+    "type": "vase",
+    "material": "wood",
+    "color": "neutral",
+    "style": "rustic",
+    "images": [
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Multicolor Boho Pillow Set",
+    "description": "Set of two pillows with vibrant bohemian patterns.",
+    "price": 45,
+    "type": "pillow",
+    "material": "fabric",
+    "color": "multicolor",
+    "style": "bohemian",
+    "images": [
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp"
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Industrial Wall Art",
+    "description": "Metal and wood abstract wall art for a modern-industrial vibe.",
+    "price": 149,
+    "type": "wallart",
+    "material": "metal",
+    "color": "neutral",
+    "style": "industrial",
+    "images": [
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp"
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Minimalist Silver Clock",
+    "description": "Simple silver wall clock with clean lines.",
+    "price": 65,
+    "type": "clock",
+    "material": "metal",
+    "color": "silver",
+    "style": "minimalist",
+    "images": [
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp"
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Glass Table Vase",
+    "description": "Clear glass vase suitable for fresh or artificial flowers.",
+    "price": 39,
+    "type": "vase",
+    "material": "glass",
+    "color": "neutral",
+    "style": "traditional",
+    "images": [
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp"
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Traditional Wall Mirror",
+    "description": "Classic oval mirror with ornate wooden frame.",
+    "price": 179,
+    "type": "mirror",
+    "material": "wood",
+    "color": "neutral",
+    "style": "traditional",
+    "images": [
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp"
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Fabric Floor Pillow",
+    "description": "Comfy oversized floor pillow for casual seating.",
+    "price": 55,
+    "type": "pillow",
+    "material": "fabric",
+    "color": "neutral",
+    "style": "bohemian",
+    "images": [
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp",
+      "/pages/accents/imgaccents/accents1.webp"
+    ]
+  }
+]

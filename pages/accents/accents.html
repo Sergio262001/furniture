@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accents & Decor</title>
+
+  <!-- ✅ Rutas relativas sin <base> -->
+  <link rel="stylesheet" href="../../style.css" />
+  <script type="module" src="../../js/firebase.js" defer></script>
+</head>
+<body>
+
+  <!-- 🔹 Top bar -->
+  <div class="top-bar">
+    <div>📍 Furniture store in Fairfield, OH | 🚚 Delivering to <strong>0000</strong></div>
+    <div>
+      <a href="../../login.html" data-login-link>Login</a>
+      <a href="#" data-logout-link style="display:none" onclick="FB.logout()">Logout</a>
+      <a href="#" id="financing-btn">Financing</a>
+      <a href="#" id="help-btn">Help</a>
+      <a href="../../cart.html">🛒 (<span id="cart-count">0</span>)</a>
+      <span data-user-badge style="margin-left:8px;opacity:.8">Invitado</span>
+    </div>
+  </div>
+
+  <!-- 🔹 Header -->
+  <div class="header">
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search decor..." />
+    </div>
+    <div class="logo">
+      <a href="../../index.html"><img src="../../logo.jfif" alt="Logo" /></a>
+    </div>
+    <div>📞 Shop by phone 000-000-0000</div>
+  </div>
+
+  <!-- 🔹 Nav -->
+  <div class="nav">
+    <a href="../livingroom/livingroom.html">LIVING ROOM</a>
+    <a href="../bedroom/bedroom.html">BEDROOM</a>
+    <a href="../dining/dining.html">DINING</a>
+    <a href="../mattresses/mattresses.html">MATTRESSES</a>
+    <a href="../outdoor/outdoor.html">OUTDOOR</a>
+    <a href="../kids/kids.html">BABY & KIDS</a>
+    <a href="../rugs/rugs.html">RUGS</a>
+    <a class="active" href="../accents/accents.html">ACCENTS & DECOR</a>
+  </div>
+
+  <!-- 🔹 Contenido principal -->
+  <div class="content">
+    <button id="filter-toggle" class="filter-toggle" onclick="toggleFilters()">☰ Filters</button>
+
+    <aside id="filters" class="filters">
+      <div class="filters-header">
+        <strong>Filters</strong>
+        <button class="filters-close-btn" type="button" aria-label="Close">✕</button>
+      </div>
+
+      <h3>Filters</h3>
+
+      <label>Min Price:</label>
+      <input type="number" id="minPriceFilter" placeholder="e.g. 100">
+
+      <label>Max Price:</label>
+      <input type="number" id="maxPriceFilter" placeholder="e.g. 2000">
+
+      <label for="typeFilter">Type:</label>
+      <select id="typeFilter">
+        <option value="">All</option>
+        <option value="mirror">Mirror</option>
+        <option value="lamp">Lamp</option>
+        <option value="pillow">Pillow</option>
+        <option value="wallart">Wall Art</option>
+        <option value="clock">Clock</option>
+        <option value="vase">Vase</option>
+      </select>
+
+      <label for="materialFilter">Material:</label>
+      <select id="materialFilter">
+        <option value="">All</option>
+        <option value="wood">Wood</option>
+        <option value="metal">Metal</option>
+        <option value="ceramic">Ceramic</option>
+        <option value="glass">Glass</option>
+        <option value="fabric">Fabric</option>
+      </select>
+
+      <label for="colorFilter">Color:</label>
+      <select id="colorFilter">
+        <option value="">All</option>
+        <option value="neutral">Neutral</option>
+        <option value="multicolor">Multicolor</option>
+        <option value="gold">Gold</option>
+        <option value="silver">Silver</option>
+        <option value="black">Black</option>
+        <option value="white">White</option>
+      </select>
+
+      <label for="styleFilter">Style:</label>
+      <select id="styleFilter">
+        <option value="">All</option>
+        <option value="modern">Modern</option>
+        <option value="traditional">Traditional</option>
+        <option value="bohemian">Bohemian</option>
+        <option value="industrial">Industrial</option>
+        <option value="minimalist">Minimalist</option>
+      </select>
+
+      <button onclick="applyFilters()">Apply Filters</button>
+    </aside>
+
+    <div class="products" id="products"></div>
+  </div>
+
+  <div class="chat">💬 Chat With Us</div>
+
+  <!-- 🔹 Script principal -->
+  <script>
+    // ===== Cargar data =====
+    fetch('./accents.json')
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("products");
+
+        function cardHref(prod) {
+          // ✅ Detalle consistente
+          return '../../producto.html?id=' + encodeURIComponent(prod.id) + '&cat=accents';
+        }
+
+        function renderProducts(list) {
+          container.innerHTML = "";
+          list.forEach(prod => {
+            const href = cardHref(prod);
+            container.innerHTML += `
+              <div class="product-card">
+                <a href="${href}">
+                  <img src="${(prod.images && prod.images[0]) || ''}" alt="${prod.name || ''}">
+                  <h3>${prod.name || ''}</h3>
+                  <p>$${Number(prod.price || 0).toFixed(2)}</p>
+                </a>
+                <button class="buy-btn"
+                  onclick="addToCart('${String(prod.id)}', '${(prod.name || '').replace(/'/g, "\\'")}', ${Number(prod.price || 0)}, '${((prod.images && prod.images[0]) || '').replace(/'/g, "\\'")}')">
+                  🛒 Buy
+                </button>
+              </div>
+            `;
+          });
+        }
+
+        renderProducts(data);
+
+        // ===== Búsqueda =====
+        document.getElementById("searchInput").addEventListener("input", e => {
+          const text = (e.target.value || "").toLowerCase();
+          if (!text) return renderProducts(data);
+          const filtered = data.filter(p =>
+            (p.name && p.name.toLowerCase().includes(text)) ||
+            (p.description && p.description.toLowerCase().includes(text))
+          );
+          renderProducts(filtered);
+        });
+
+        // ===== Filtros =====
+        window.toggleFilters = () => {
+          document.getElementById("filters").classList.toggle("open");
+        };
+
+        window.applyFilters = () => {
+          const min = parseFloat(document.getElementById("minPriceFilter").value) || 0;
+          const max = parseFloat(document.getElementById("maxPriceFilter").value) || Infinity;
+          const type = document.getElementById("typeFilter").value.toLowerCase();
+          const material = document.getElementById("materialFilter").value.toLowerCase();
+          const color = document.getElementById("colorFilter").value.toLowerCase();
+          const style = document.getElementById("styleFilter").value.toLowerCase();
+
+          const filtered = data.filter(p =>
+            Number(p.price || 0) >= min &&
+            Number(p.price || 0) <= max &&
+            (type === "" || (p.type && p.type.toLowerCase() === type)) &&
+            (material === "" || (p.material && p.material.toLowerCase() === material)) &&
+            (color === "" || (p.color && p.color.toLowerCase() === color)) &&
+            (style === "" || (p.style && p.style.toLowerCase() === style))
+          );
+          renderProducts(filtered);
+        };
+      });
+
+    // ===== Carrito =====
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function lsSet(items) {
+      localStorage.setItem("cart", JSON.stringify(items));
+      updateCartCount();
+    }
+
+    function updateCartCount() {
+      const count = (cart || []).reduce((s, i) => s + Number(i.quantity || 0), 0);
+      const el = document.getElementById("cart-count");
+      if (el) el.textContent = count;
+    }
+
+    async function addToCart(id, name, price, image) {
+      const item = { id, name, price: Number(price || 0), image: image || "", quantity: 1 };
+      const useFirebase = window.FB && FB.auth && FB.auth.currentUser && typeof FB.addToCart === "function";
+      try {
+        if (useFirebase) await FB.addToCart(item);
+        else {
+          const found = cart.find(p => String(p.id) === String(id));
+          if (found) found.quantity = Number(found.quantity || 0) + 1;
+          else cart.push(item);
+          lsSet(cart);
+        }
+        if (!useFirebase) updateCartCount();
+        alert(name + " added ✅");
+      } catch (e) {
+        console.error(e);
+        alert("Could not add to cart: " + (e.message || e));
+      }
+    }
+
+    window.onload = updateCartCount;
+    window.addEventListener("storage", e => {
+      if (e.key === "cart") {
+        cart = JSON.parse(localStorage.getItem("cart")) || [];
+        updateCartCount();
+      }
+    });
+  </script>
+
+  <!-- 🔹 Scripts globales -->
+  <script src="../../js/modals.js" defer></script>
+  <script src="../../js/chat-widget.js" defer></script>
+</body>
+</html>

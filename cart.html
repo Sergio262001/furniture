@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mi Carrito - Ashley Clone</title>
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Firebase (usa tu config en /js/firebase.js) -->
+  <script type="module" src="js/firebase.js"></script>
+</head>
+<body>
+
+  <!-- 🔹 TOP BAR (login/logout dinámico) -->
+  <div class="top-bar">
+    <div>📍 Furniture store in Fairfield, OH | 🚚 Delivering to <strong>0000</strong></div>
+    <div>
+      <a href="login.html" data-login-link>Login</a>
+      <a href="#" data-logout-link style="display:none" onclick="FB.logout()">Logout</a>
+      <a href="#" id="financing-btn">Financing</a>
+      <a href="#" id="help-btn">Help</a>
+      <a href="cart.html">🛒 (<span id="cart-count">0</span>)</a>
+      <span data-user-badge style="margin-left:8px;opacity:.8">Invitado</span>
+    </div>
+  </div>
+
+  <!-- 🔹 HEADER -->
+  <div class="header">
+    <div class="logo">
+      <a href="index.html"><img src="logo.jfif" alt="Ashley Logo" /></a>
+    </div>
+    <div class="cart-header">
+      <h1>🛒 Mi Carrito</h1>
+    </div>
+  </div>
+
+  <!-- 🔹 CONTENEDOR DEL CARRITO -->
+  <div class="cart-container">
+    <div id="cart-items" class="cart-items"></div>
+
+    <!-- RESUMEN DEL TOTAL -->
+    <div class="cart-summary">
+      <h2>Resumen de compra</h2>
+      <p id="total">Total: $0.00</p>
+      <button onclick="clearCart()" class="clear-btn">🗑 Vaciar carrito</button>
+      <a href="index.html" class="continue-btn">⬅️ Seguir comprando</a>
+      <button class="checkout-btn" id="btnCheckout">✅ Finalizar compra</button>
+    </div>
+  </div>
+
+  <!-- =========================
+       Lógica de carrito (localStorage)
+       ========================= -->
+  <script>
+  (function () {
+    // lee carrito desde localStorage
+    const raw = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // normaliza cada producto
+    function normalize(rawItem, idx) {
+      return {
+        id: rawItem.id ?? idx,
+        nombre: rawItem.nombre ?? rawItem.name ?? "Producto",
+        precio: Number(rawItem.precio ?? rawItem.price ?? 0),
+        imagen: rawItem.imagen ?? rawItem.image ?? "imgpromo/placeholder.webp",
+        cantidad: Number(rawItem.cantidad ?? rawItem.quantity ?? 1)
+      };
+    }
+
+    let cart = raw.map(normalize);
+
+    function saveCart() {
+      localStorage.setItem("cart", JSON.stringify(cart));
+      // actualiza contador global si existe
+      try {
+        const count = cart.reduce((s, it) => s + (it.cantidad || 0), 0);
+        const badge = document.getElementById("cart-count");
+        if (badge) badge.textContent = count;
+      } catch(_) {}
+    }
+
+    function renderCart() {
+      const container = document.getElementById("cart-items");
+      container.innerHTML = "";
+      if (!cart.length) {
+        container.innerHTML = "<p>Tu carrito está vacío.</p>";
+        document.getElementById("total").textContent = "Total: $0.00";
+        return;
+      }
+
+      let total = 0;
+      cart.forEach((item, i) => {
+        total += item.precio * item.cantidad;
+        container.insertAdjacentHTML("beforeend", `
+          <div class="cart-item">
+            <img src="${item.imagen}" alt="${item.nombre}" class="cart-img">
+            <div class="cart-info">
+              <h3>${item.nombre}</h3>
+              <p>Precio: $${item.precio.toFixed(2)}</p>
+              <div class="qty-control">
+                <button onclick="changeQty(${i}, -1)">➖</button>
+                <span>${item.cantidad}</span>
+                <button onclick="changeQty(${i}, 1)">➕</button>
+              </div>
+              <p><strong>Subtotal: $${(item.precio * item.cantidad).toFixed(2)}</strong></p>
+            </div>
+            <button onclick="removeFromCart(${i})">❌</button>
+          </div>
+        `);
+      });
+
+      document.getElementById("total").textContent = "Total: $" + total.toFixed(2);
+    }
+
+    // Exponer helpers para botones inline
+    window.changeQty = function (i, delta) {
+      cart[i].cantidad += delta;
+      if (cart[i].cantidad <= 0) cart.splice(i, 1);
+      saveCart();
+      renderCart();
+    };
+
+    window.removeFromCart = function (i) {
+      cart.splice(i, 1);
+      saveCart();
+      renderCart();
+    };
+
+    window.clearCart = function () {
+      cart = [];
+      saveCart();
+      renderCart();
+    };
+
+    // inicializa vista
+    saveCart();
+    renderCart();
+  })();
+  </script>
+
+  <!-- =========================
+       Checkout con Stripe (opcional)
+       ========================= -->
+  <script type="module">
+    // Solo si tendrás la Cloud Function mapeada:
+    //  firebase.json (hosting.rewrites): { "source": "/createCheckoutSession", "function": "createCheckoutSession" }
+    const btn = document.getElementById("btnCheckout");
+    btn?.addEventListener("click", async () => {
+      // lee items actuales del localStorage (mismo formato que render)
+      const items = (JSON.parse(localStorage.getItem("cart")) || []).map(it => ({
+        id: it.id,
+        name: it.nombre || it.name || "Product",
+        price: Number(it.precio ?? it.price ?? 0),
+        quantity: Number(it.cantidad ?? it.quantity ?? 1)
+      }));
+
+      if (!items.length) {
+        alert("Tu carrito está vacío.");
+        return;
+      }
+
+      try {
+        // pide sesión a la Function
+        const res = await fetch("/createCheckoutSession", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ items })
+        });
+        const data = await res.json();
+        if (!data.sessionId) throw new Error(data.error || "No se pudo crear la sesión");
+
+        // carga Stripe.js si hace falta
+        if (!window.Stripe) {
+          await new Promise(r => {
+            const s = document.createElement("script");
+            s.src = "https://js.stripe.com/v3/";
+            s.onload = r;
+            document.head.appendChild(s);
+          });
+        }
+        const stripe = Stripe(data.publicKey);
+        await stripe.redirectToCheckout({ sessionId: data.sessionId });
+      } catch (e) {
+        alert("Error en checkout: " + e.message);
+      }
+    });
+  </script>
+
+  <!-- (Opcional) scripts de modales/chat si los usas en carrito -->
+  <script src="js/modals.js" defer></script>
+  <script src="js/chat-widget.js" defer></script>
+</body>
+</html>

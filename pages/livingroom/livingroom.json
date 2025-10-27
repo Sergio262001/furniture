@@ -1,0 +1,172 @@
+[
+  {
+    "id": 1,
+    "name": "Luxury Leather Sofa",
+    "price": 1499,
+    "material": "leather",
+    "color": "black",
+    "type": "sofa",
+    "size": "large",
+    "reclining": false,
+    "accessories": [],
+    "images": [
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp"
+    ],
+    "description": "Elegant black leather sofa with a sleek design and premium comfort."
+  },
+  {
+    "id": 2,
+    "name": "Sofa Gray",
+    "description": "Comfortable gray sofa",
+    "price": 499,
+    "material": "fabric",
+    "color": "gray",
+    "type": "sofa",
+    "size": "large",
+    "reclining": false,
+    "accessories": ["led", "usb"],
+    "images": [
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Loveseat with Storage & USB",
+    "price": 599,
+    "material": "fabric",
+    "color": "blue",
+    "type": "loveseat",
+    "size": "medium",
+    "reclining": false,
+    "accessories": ["usb", "storage"],
+    "images": [
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp"
+    ],
+    "description": "Compact blue loveseat with hidden storage and built-in USB charging ports."
+  },
+  {
+    "id": 4,
+    "name": "Classic Ottoman with Storage",
+    "price": 199,
+    "material": "fabric",
+    "color": "brown",
+    "type": "ottoman",
+    "size": "small",
+    "reclining": false,
+    "accessories": ["storage"],
+    "images": [
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp"
+    ],
+    "description": "Small brown ottoman with hidden storage, perfect for organizing your living room."
+  },
+  {
+    "id": 5,
+    "name": "Massage Recliner Chair with Bluetooth Speakers",
+    "price": 899,
+    "material": "leather",
+    "color": "white",
+    "type": "recliner",
+    "size": "medium",
+    "reclining": true,
+    "accessories": ["massage", "bluetooth", "speakers"],
+    "images": [
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp"
+    ],
+    "description": "Comfortable white leather recliner with massage function, Bluetooth connectivity, and built-in speakers."
+  },
+  {
+    "id": 6,
+    "name": "Velvet Chaise Lounge",
+    "price": 799,
+    "material": "velvet",
+    "color": "red",
+    "type": "chaise",
+    "size": "medium",
+    "reclining": false,
+    "accessories": [],
+    "images": [
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp"
+    ],
+    "description": "Stylish red velvet chaise lounge with a classic design."
+  },
+  {
+    "id": 7,
+    "name": "Convertible Futon Sofa Bed",
+    "price": 499,
+    "material": "fabric",
+    "color": "black",
+    "type": "futon",
+    "size": "medium",
+    "reclining": true,
+    "accessories": [],
+    "images": [
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp"
+    ],
+    "description": "Practical black futon sofa bed, ideal for small spaces."
+  },
+  {
+    "id": 8,
+    "name": "Rustic Wooden Coffee Table",
+    "price": 299,
+    "material": "wood",
+    "color": "brown",
+    "type": "table",
+    "size": "medium",
+    "reclining": false,
+    "accessories": [],
+    "images": [
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp"
+    ],
+    "description": "Sturdy wooden coffee table with a rustic finish."
+  },
+  {
+    "id": 9,
+    "name": "Glass Top Side Table",
+    "price": 149,
+    "material": "glass",
+    "color": "transparent",
+    "type": "table",
+    "size": "small",
+    "reclining": false,
+    "accessories": [],
+    "images": [
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp"
+    ],
+    "description": "Modern side table with tempered glass top and metal legs."
+  },
+  {
+    "id": 10,
+    "name": "Reclining Leather Loveseat",
+    "price": 1099,
+    "material": "leather",
+    "color": "brown",
+    "type": "loveseat",
+    "size": "medium",
+    "reclining": true,
+    "accessories": ["cup holders"],
+    "images": [
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp",
+      "/pages/livingroom/imgliving/sofa1.webp"
+    ],
+    "description": "Brown leather loveseat with dual reclining seats and built-in cup holders."
+  }
+]

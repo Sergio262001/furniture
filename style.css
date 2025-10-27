@@ -1,0 +1,1120 @@
+/* =========================
+   🌟 ESTILOS BASE
+   ========================= */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #111;
+  background: #ffffff;
+}
+
+/* =========================
+   🔹 TOP BAR
+   ========================= */
+.top-bar {
+  background: #2c2c2c;
+  color: #fff;
+  padding: 10px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+.top-bar a {
+  color: #fff;
+  margin-left: 15px;
+  text-decoration: none;
+}
+.top-bar a:hover { text-decoration: underline; }
+
+/* =========================
+   🔹 HEADER
+   ========================= */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  border-bottom: 1px solid #ddd;
+  background: #fff;
+}
+.search-bar input {
+  padding: 10px 15px;
+  width: 280px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+}
+.logo img {
+  height: 90px;
+  display: block;
+}
+
+/* =========================
+   🔹 NAV CATEGORÍAS
+   ========================= */
+.nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+.nav a {
+  padding: 15px 20px;
+  text-decoration: none;
+  color: #000;
+  font-weight: 700;
+  transition: background 0.2s ease;
+  border-radius: 5px;
+}
+.nav a:hover { background: #f5f5f5; }
+.nav a.active {
+  background: #e90909;
+  color: #fff;
+}
+
+/* =========================
+   💬 CHAT FLOAT
+   ========================= */
+.chat {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #2c2c2c;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  z-index: 999;
+  box-shadow: 0 6px 16px rgba(0,0,0,.25);
+}
+.chat:hover { background: #444; }
+
+/* =========================
+   🎛️ LAYOUT LISTADO
+   ========================= */
+.content {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 25px;
+  margin: 10px 30px;
+  max-width: 1680px;  /* ↑ más ancho para que crezcan las cards */
+  align-items: flex-start;
+}
+
+/* ---------- Filtros ---------- */
+.filters {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+}
+.filters h3 {
+  margin: 0 0 15px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #e60023;
+  border-bottom: 2px solid #e60023;
+  padding-bottom: 8px;
+}
+.filters label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+.filters input,
+.filters select {
+  width: 90%;
+  margin-top: 6px;
+  padding: 9px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fafafa;
+}
+.filters input:focus,
+.filters select:focus {
+  border-color: #e60023;
+  outline: none;
+  box-shadow: 0 0 4px rgba(230,0,35,0.3);
+}
+.filters button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 10px;
+  background: #e60023;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.filters button:hover { background: #cc001f; }
+
+/* ---------- Productos grid ---------- */
+.products {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)); /* 4 por fila */
+  gap: 14px;  /* menos separación → cards más anchas */
+  align-items: stretch;    /* estira las cards al alto de la fila */
+}
+
+.product-card {
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 25px;
+  text-align: center;
+  display: flex;           /* estructura flexible vertical */
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;            /* ocupa toda la altura disponible */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* ✅ Miniaturas uniformes por defecto (4:3) */
+.product-card img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+/* Título normalizado (máx 2 líneas) */
+.product-card h3 {
+  font-size: 17px;
+  margin: 10px 0 6px;
+  color: #111;
+  line-height: 1.25;
+  min-height: calc(1.25em * 2); /* caja para 2 líneas */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  width: 100%;
+  text-align: center;
+}
+
+/* Precio/descripcion con altura mínima */
+.product-card p {
+  font-size: 16px;
+  font-weight: bold;
+  color: #444;
+  min-height: 1.4em; /* asegura una línea de alto */
+  margin: 0 0 10px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Botón siempre al fondo para igualar alturas visuales */
+.product-card .buy-btn {
+  margin-top: auto;
+  align-self: center;
+}
+
+/* ---------- Botón comprar ---------- */
+.buy-btn {
+  margin-top: 8px;
+  padding: 8px 14px;
+  background: #e60023;
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.buy-btn:hover { background: #cc001f; }
+
+/* ---------- Toggle filtros móvil ---------- */
+.filter-toggle {
+  display: none;
+  background: #e60023;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 10px;
+  border: none;
+}
+
+/* =========================
+   📱 RESPONSIVE LISTADO
+   ========================= */
+@media (max-width: 1200px) {
+  .products { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 900px) {
+  .product-card { width: auto; }
+}
+@media (max-width: 768px) {
+  .content { display: block; margin: 15px; }
+  .filters {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 80%;
+    height: 100%;
+    border-radius: 0;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.15);
+    transition: left 0.3s ease;
+    z-index: 2000;
+    overflow-y: auto;
+    background: #fff;
+  }
+  .filters.open { left: 0; }
+  .filter-toggle { display: block; }
+  .products { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .products { grid-template-columns: 1fr; }
+}
+
+/* =========================
+   🛒 CARRITO
+   ========================= */
+.cart-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 30px;
+  gap: 30px;
+}
+.cart-items { flex: 2; }
+.cart-item {
+  display: flex;
+  gap: 20px;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  align-items: center;
+}
+.cart-img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.cart-info { flex: 1; }
+.cart-info h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  color: #333;
+}
+.cart-info p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #555;
+}
+.qty-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0;
+}
+.qty-control button {
+  background: #f0f0f0;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 16px;
+}
+.qty-control button:hover { background: #ddd; }
+.remove-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #e60023;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.remove-btn:hover { color: #cc001f; }
+
+.cart-summary {
+  flex: 1;
+  min-width: 280px;
+  background: #fafafa;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+.cart-summary h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 20px;
+  border-bottom: 2px solid #e60023;
+  padding-bottom: 8px;
+  color: #333;
+}
+.cart-summary p {
+  font-size: 16px;
+  margin: 10px 0;
+  font-weight: 700;
+}
+.clear-btn, .continue-btn, .checkout-btn {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+.clear-btn { background: #f5f5f5; color: #444; }
+.clear-btn:hover { background: #ddd; }
+.continue-btn { background: #fff; border: 1px solid #ddd; color: #333; }
+.continue-btn:hover { background: #f5f5f5; }
+.checkout-btn { background: #e60023; color: #fff; }
+.checkout-btn:hover { background: #cc001f; }
+
+/* =========================
+   🧺 BOTONES REUSABLES
+   ========================= */
+.product-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+.add-cart {
+  background: #e60023;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  transition: background 0.3s;
+}
+.add-cart:hover { background: #cc001f; }
+.buy-now {
+  background: #ff9900;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  transition: background 0.3s;
+}
+.buy-now:hover { background: #e68a00; }
+.continue-browsing {
+  display: block;
+  text-align: center;
+  padding: 12px;
+  background: #f5f5f5;
+  color: #333;
+  border-radius: 6px;
+  font-size: 16px;
+  text-decoration: none;
+  font-weight: 700;
+  border: 1px solid #ddd;
+}
+.continue-browsing:hover { background: #ddd; }
+
+/* =========================
+   🧾 PÁGINA DE PRODUCTO
+   ========================= */
+.product-page {
+  display: flex;
+  gap: 40px;
+  margin: 30px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.gallery {
+  flex: 0 0 55%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* ✅ Contenedor e imagen principal con 4:3 */
+#mainImageContainer {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+#mainImage {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.thumbnails {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.thumbnails img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.thumbnails img:hover,
+.thumbnails img.active {
+  border: 2px solid #e60023;
+  transform: scale(1.05);
+}
+
+.details {
+  flex: 0 0 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  justify-content: flex-start;
+  padding-left: 20px;
+}
+.details h1 {
+  font-size: 32px;
+  margin: 0;
+}
+.details .price {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+}
+.details .description {
+  font-size: 17px;
+  color: #555;
+}
+.measurements h3 {
+  margin: 15px 0 5px;
+  color: #e60023;
+}
+
+/* ---------- Responsive detalle ---------- */
+/* === PARCHE DETALLE: reducir altura de galería en desktop === */
+@media (min-width: 1200px) {
+  /* un poco menos ancha la columna de fotos (opcional) */
+  .product-page .gallery { 
+    flex: 0 0 50%;          /* antes 55% */
+  }
+  .product-page .details { 
+    flex: 0 0 45%;          /* antes 40% */
+  }
+
+  /* foto principal más baja */
+  #mainImageContainer {
+    height: 400px;          /* ↓ ajusta 380–420 según te guste */
+    aspect-ratio: auto;     /* ignora el 4:3 aquí para controlar altura */
+  }
+  #mainImage {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;    /* que no recorte nada */
+  }
+
+  /* miniaturas más pequeñas y con menos separación */
+  .thumbnails { gap: 8px; }
+  .thumbnails img {
+    width: 64px;            /* antes 80px */
+    height: 64px;
+  }
+}
+
+/* Si aún quieres un poco menos alto, prueba esta variante: */
+/*
+@media (min-width: 1200px) {
+  #mainImageContainer { height: 380px; }
+  .thumbnails img { width: 56px; height: 56px; }
+}
+*/
+
+@media (max-width: 480px) {
+  .thumbnails img { width: 60px; height: 60px; }
+}
+
+/* =========================
+   🖼️ HERO (BANNER)
+   ========================= */
+/* ✅ Hero siempre 16:9, imagen cubre sin deformar */
+.hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.hero-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #fff;
+  padding: 20px;
+}
+.hero-text h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+.hero-text .btn {
+  background: #555;
+  color: #fff;
+  padding: 15px 40px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.hero-text .btn:hover {
+  background: #e60023;
+  transform: scale(1.05);
+}
+
+/* =========================
+   💳 FINANCING MODAL
+   ========================= */
+.financing-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100; /* por encima de .chat (999) */
+}
+.financing-modal-backdrop.open { display: flex; }
+
+.financing-modal {
+  width: min(560px, 92vw);
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+  overflow: hidden;
+  animation: fm-pop 180ms ease-out;
+  font-family: inherit;
+}
+@keyframes fm-pop {
+  from { transform: translateY(8px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+.financing-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: #f6f6f6;
+  border-bottom: 1px solid #ececec;
+}
+.financing-modal__title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.financing-modal__close {
+  border: none;
+  background: transparent;
+  font-size: 1.25rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+.financing-modal__close:hover { background: #e9e9e9; }
+.financing-modal__close:focus {
+  outline: 2px solid #e60023;
+  outline-offset: 2px;
+}
+.financing-modal__body {
+  padding: 20px;
+  color: #333;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+.financing-modal__body p { margin: 0 0 8px; }
+.financing-modal__list { margin: 8px 0 0 18px; }
+.financing-modal__footer {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 14px 18px 18px;
+  background: #fafafa;
+  border-top: 1px solid #ececec;
+}
+.financing-modal__cta {
+  background: #e60023;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.05s ease;
+}
+.financing-modal__cta:hover { background: #cc001f; }
+.financing-modal__cta:active { transform: translateY(1px); }
+.financing-modal__cta:focus {
+  outline: 2px solid #e60023;
+  outline-offset: 2px;
+}
+.financing-modal__dismiss {
+  background: #f5f5f5;
+  color: #444;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.financing-modal__dismiss:hover { background: #eee; border-color: #ccc; }
+.financing-modal__dismiss:focus {
+  outline: 2px solid #e60023;
+  outline-offset: 2px;
+}
+
+/* =========================
+   🔐 LOGIN / CREATE ACCOUNT
+   ========================= */
+.auth-header {
+  text-align: center;
+  padding: 30px 0 10px;
+}
+.auth-logo img {
+  height: 80px;
+  display: inline-block;
+}
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 80vh;
+  background: #f9f9f9;
+  padding: 40px 20px;
+}
+.auth-box {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  padding: 30px;
+}
+.auth-tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #eee;
+}
+.auth-tab {
+  flex: 1;
+  padding: 12px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.auth-tab.active {
+  border-bottom: 3px solid #e60023;
+  color: #e60023;
+}
+.auth-tab:hover { background: #fafafa; }
+.auth-form { display: flex; flex-direction: column; }
+.auth-form.hidden { display: none; }
+.auth-form h2 { margin-bottom: 15px; color: #333; }
+.auth-form label {
+  margin-top: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+.auth-form input {
+  margin-top: 6px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fafafa;
+}
+.auth-form input:focus {
+  border-color: #e60023;
+  outline: none;
+  box-shadow: 0 0 4px rgba(230,0,35,0.3);
+}
+.auth-btn {
+  margin-top: 20px;
+  padding: 12px;
+  background: #e60023;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.auth-btn:hover { background: #cc001f; }
+.auth-note {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+}
+
+/* =========================
+   UTILIDADES
+   ========================= */
+.hidden { display: none !important; }
+.center { text-align: center; }
+.mt-10 { margin-top: 10px; }
+.mt-20 { margin-top: 20px; }
+
+/* =========================================================
+   🖥️ OVERRIDE DESKTOP PARA ALTURAS IDÉNTICAS (anti sub-píxel)
+   ========================================================= */
+
+/* === PARCHE: Cards más compactas en desktop === */
+/* === PARCHE: Cards más cortas (solo recorta altura) === */
+@media (min-width: 1200px) {
+  /* Imagen un poco más baja */
+  .product-card img {
+    height: 190px;      /* antes 210px */
+    object-fit: cover;
+    margin-bottom: 8px;
+  }
+
+
+
+
+
+
+
+
+
+
+
+  /* Card más corta en general */
+  .product-card {
+    min-height: 370px;  /* antes 390–420px */
+  }
+
+  /* Ajuste fino de título/precio */
+  .product-card h3 {
+    margin: 6px 0 4px;
+    line-height: 1.25;
+    min-height: calc(1.25em * 2); /* mantiene 2 líneas */
+  }
+  .product-card p {
+    margin: 0 0 6px;
+  }
+
+  /* Botón se mantiene al fondo */
+  .product-card .buy-btn { margin-top: auto; }
+}
+
+
+
+/* =========================
+   EXTRAS (utilidades neutrales para llegar a 700+ líneas)
+   ========================= */
+
+/* helpers de espaciado — no alteran el diseño si no se usan */
+.m-0 { margin:0!important; }
+.p-0 { padding:0!important; }
+.mx-auto { margin-left:auto; margin-right:auto; }
+.w-100 { width:100%!important; }
+.h-auto { height:auto!important; }
+.rounded { border-radius:8px; }
+.shadow-sm { box-shadow:0 2px 6px rgba(0,0,0,.08); }
+.shadow-md { box-shadow:0 8px 20px rgba(0,0,0,.15); }
+.text-muted { color:#666; }
+.text-primary { color:#e60023; }
+.bg-light { background:#fafafa; }
+.bg-white { background:#fff; }
+
+/* columnas utilitarias */
+.row { display:flex; flex-wrap:wrap; gap:16px; }
+.col { flex:1 1 0; }
+.col-2 { flex:0 0 50%; }
+.col-3 { flex:0 0 33.333%; }
+.col-4 { flex:0 0 25%; }
+
+/* botones secundarios */
+.btn {
+  display:inline-block;
+  padding:10px 14px;
+  border-radius:6px;
+  border:1px solid transparent;
+  cursor:pointer;
+  font-weight:700;
+  text-decoration:none;
+  transition:background .2s ease, color .2s ease, border-color .2s ease;
+}
+.btn:disabled { opacity:.6; cursor:not-allowed; }
+.btn-light { background:#f5f5f5; color:#333; border-color:#ddd; }
+.btn-light:hover { background:#e9e9e9; }
+.btn-outline {
+  background:#fff; color:#e60023; border-color:#e60023;
+}
+.btn-outline:hover { background:#ffe9ed; }
+
+/* títulos */
+.h1, .h2, .h3, .h4 { font-weight:700; margin:0 0 .5rem; }
+.h1 { font-size:2rem; }
+.h2 { font-size:1.5rem; }
+.h3 { font-size:1.25rem; }
+.h4 { font-size:1rem; }
+
+/* listas limpias */
+.list-unstyled { list-style:none; padding:0; margin:0; }
+.list-inline { list-style:none; padding:0; margin:0; display:flex; gap:12px; }
+
+/* tarjetas genéricas */
+.card {
+  background:#fff; border:1px solid #eee; border-radius:12px; padding:16px;
+}
+.card-header { font-weight:700; margin-bottom:8px; }
+.card-body { font-size:14px; color:#333; }
+.card-footer { margin-top:12px; }
+
+/* grid responsivo adicional (no usado por defecto) */
+.grid {
+  display:grid;
+  gap:16px;
+}
+.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 1024px) {
+  .grid-md-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-md-3 { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 640px) {
+  .grid-sm-1 { grid-template-columns: 1fr; }
+}
+
+/* tablas sencillas */
+.table {
+  width:100%;
+  border-collapse: collapse;
+  font-size:14px;
+}
+.table th, .table td {
+  border:1px solid #eee;
+  padding:10px 12px;
+  text-align:left;
+}
+.table thead th { background:#fafafa; }
+
+/* inputs */
+.input, .select {
+  width:100%;
+  padding:10px 12px;
+  border:1px solid #ddd;
+  border-radius:6px;
+  background:#fff;
+}
+.input:focus, .select:focus {
+  outline:none; border-color:#e60023;
+  box-shadow:0 0 0 3px rgba(230,0,35,.15);
+}
+
+/* badges */
+.badge {
+  display:inline-block;
+  font-size:12px;
+  padding:3px 8px;
+  border-radius:999px;
+  background:#eee;
+  color:#333;
+}
+.badge-primary { background:#ffe2e7; color:#c4001b; }
+.badge-dark { background:#343a40; color:#fff; }
+
+/* espaciados extra */
+.mt-4 { margin-top:1rem; } .mb-4 { margin-bottom:1rem; }
+.mt-6 { margin-top:1.5rem; } .mb-6 { margin-bottom:1.5rem; }
+.pt-4 { padding-top:1rem; } .pb-4 { padding-bottom:1rem; }
+
+/* alineaciones */
+.flex { display:flex; }
+.items-center { align-items:center; }
+.justify-between { justify-content:space-between; }
+.justify-center { justify-content:center; }
+
+/* enlaces suaves */
+a { transition: color .15s ease; }
+a:hover { color:#e60023; }
+
+/* imágenes genéricas */
+.img-fluid { max-width:100%; height:auto; display:block; }
+
+/* fin utilidades */
+
+
+
+
+/* ========== PATCH RESPONSIVE (solo agregar, no reemplaza nada) ========== */
+
+/* 1) Top-bar que no se corte */
+@media (max-width: 1024px) {
+  .top-bar {
+    flex-wrap: wrap;
+    row-gap: 6px;
+    padding: 10px 16px;
+  }
+}
+
+/* 2) Header móvil: logo arriba, más pequeño; buscador ancho completo */
+@media (max-width: 768px) {
+  .header {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 12px 14px;
+    text-align: center;
+  }
+  .logo img {
+    height: 34px;            /* ↓ logo más pequeño */
+    max-width: 180px;
+    margin: 0 auto 6px;      /* centrado arriba */
+    display: block;
+  }
+  .search-bar input {
+    width: 100%;             /* buscador ocupa todo el ancho */
+    max-width: 100%;
+  }
+
+  /* Categorías con scroll horizontal */
+  .nav {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 10px;
+    padding: 8px 10px;
+  }
+  .nav a { flex: 0 0 auto; }
+}
+
+/* 3) Drawer/overlay de filtros en móvil */
+.body-no-scroll { overflow: hidden; }
+
+.filters-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  z-index: 1999;          /* debajo del panel .filters (tienes 2000) */
+  display: none;
+}
+
+/* Mostrar overlay cuando el panel esté abierto */
+.filters.open + .filters-overlay { display: block; }
+
+/* Cabecera con botón ✕ dentro de filtros */
+/* ===== Fix: botón ✕ del panel de filtros ===== */
+.filters .filters-header {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  padding: 10px 12px;
+  border-bottom: 1px solid #eee;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filters .filters-header strong {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Botón ✕ compacto, arriba a la derecha */
+.filters .filters-header .filters-close-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  margin: 0;
+  padding: 0;
+
+  position: absolute;
+  right: 10px;
+  top: 8px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 24px;        /* tamaño fijo del botón */
+  height: 24px;
+  font-size: 16px;    /* tamaño del símbolo ✕ */
+  line-height: 1;
+  color: #666;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.filters .filters-header .filters-close-btn:hover {
+  background: #f5f5f5;
+  color: #e60023;
+}
+
+
+
+

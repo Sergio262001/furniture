@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashley Clone</title>
+
+  <!-- [MOD] Rutas relativas puras (sin <base>) -->
+  <link rel="stylesheet" href="style.css" />
+  <script type="module" src="js/firebase.js"></script>
+</head>
+
+<body>
+  <!-- Barra superior -->
+  <div class="top-bar">
+    <div>📍 Furniture store in Fairfield, OH | 🚚 Delivering to <strong>0000</strong></div>
+    <div>
+      <!-- Login / Logout controlados por Firebase -->
+      <a href="login.html" data-login-link>Login</a>
+      <a href="#" data-logout-link style="display:none" onclick="FB.logout()">Logout</a>
+
+      <!-- Otros enlaces -->
+      <a href="#" id="financing-btn">Financing</a>
+      <a href="#" id="help-btn">Help</a>
+      <a href="cart.html">🛒 (<span id="cart-count">0</span>)</a>
+
+      <!-- Badge de usuario -->
+      <span data-user-badge style="margin-left:8px;opacity:.8">Invitado</span>
+    </div>
+  </div>
+
+  <!-- Logo + buscador -->
+  <div class="header">
+    <div class="search-bar">
+      <!-- [OK] acción relativa -->
+      <form action="pages/search.html" method="GET">
+        <input type="text" name="q" placeholder="Search products..." />
+      </form>
+    </div>
+
+    <div class="logo">
+      <!-- [OK] imagen en raíz -->
+      <img src="logo.jfif" alt="Ashley Logo" />
+    </div>
+    <div>📞 Shop by phone 000-000-0000</div>
+  </div>
+
+  <!-- MENÚ -->
+  <div class="nav">
+    <a href="pages/livingroom/livingroom.html">LIVING ROOM</a>
+    <a href="pages/bedroom/bedroom.html">BEDROOM</a>
+    <a href="pages/dining/dining.html">DINING</a>
+    <a href="pages/mattresses/mattresses.html">MATTRESSES</a>
+    <a href="pages/outdoor/outdoor.html">OUTDOOR</a>
+    <a href="pages/kids/kids.html">BABY & KIDS</a>
+    <a href="pages/rugs/rugs.html">RUGS</a>
+    <a href="pages/accents/accents.html">ACCENTS & DECOR</a>
+  </div>
+
+  <!-- Banner oferta -->
+  <div class="promo"></div>
+
+  <!-- Banner principal -->
+  <div class="hero">
+    <!-- [MOD] Escapar espacio en el nombre del archivo para evitar 404 en GitHub Pages -->
+    <img src="imgpromo/Banner%201.jpg" alt="Labor Day Sale" class="hero-img" />
+    <div class="hero-text">
+      <h1>Labor Day Sale</h1>
+      <button class="btn">SHOP NOW</button>
+    </div>
+  </div>
+
+  <!-- Chat flotante -->
+  <div class="chat">💬 Chat With Us</div>
+
+  <!-- =========================
+       Cart counter (localStorage)
+       ========================= -->
+  <script>
+    function getCartCountFromStorage() {
+      try {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        return cart.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
+      } catch (e) {
+        return 0;
+      }
+    }
+    function updateCartCountHome() {
+      const countEl = document.getElementById("cart-count");
+      if (countEl) countEl.textContent = getCartCountFromStorage();
+    }
+    window.addEventListener("load", updateCartCountHome);
+    window.addEventListener("storage", (e) => {
+      if (e.key === "cart") updateCartCountHome();
+    });
+  </script>
+
+  <!-- Modales centralizados y chat -->
+  <script src="js/modals.js" defer></script>
+  <script src="js/chat-widget.js" defer></script>
+</body>
+</html>

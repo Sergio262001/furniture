@@ -1,0 +1,172 @@
+[
+  {
+    "id": 101,
+    "name": "King Upholstered Bed with Storaga",
+    "price": 1299,
+    "material": "upholstered",
+    "color": "gray",
+    "size": "king",
+    "storage": true,
+    "images": [
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp"
+    ],
+    "description": "Elegant king size upholstered bed in gray fabric with built-in storage drawers."
+  },
+  {
+    "id": 102,
+    "name": "Queen Wooden Platform Bed",
+    "price": 899,
+    "material": "wood",
+    "color": "brown",
+    "size": "queen",
+    "storage": false,
+    "images": [
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp"
+    ],
+    "description": "Classic queen platform bed made of solid wood with a rustic brown finish."
+  },
+  {
+    "id": 103,
+    "name": "California King Metal Frame Bed",
+    "price": 749,
+    "material": "metal",
+    "color": "black",
+    "size": "california king",
+    "storage": false,
+    "images": [
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp"
+    ],
+    "description": "Sturdy black California King bed with a minimal modern metal frame design."
+  },
+  {
+    "id": 104,
+    "name": "Full Upholstered Bed with LED Lights",
+    "price": 699,
+    "material": "upholstered",
+    "color": "white",
+    "size": "full",
+    "storage": false,
+    "images": [
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp"
+    ],
+    "description": "Contemporary white full-size upholstered bed with integrated LED lights."
+  },
+  {
+    "id": 105,
+    "name": "Twin Wooden Bed with Trundle Storage",
+    "price": 599,
+    "material": "wood",
+    "color": "white",
+    "size": "twin",
+    "storage": true,
+    "images": [
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp"
+    ],
+    "description": "White twin bed with extra pull-out trundle drawer for storage or sleepovers."
+  },
+  {
+    "id": 106,
+    "name": "Nightstand with USB Ports",
+    "price": 199,
+    "material": "wood",
+    "color": "gray",
+    "size": "small",
+    "storage": true,
+    "images": [
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp"
+    ],
+    "description": "Modern gray wooden nightstand with storage drawers and built-in USB charging ports."
+  },
+  {
+    "id": 107,
+    "name": "6-Drawer Wooden Dresser",
+    "price": 699,
+    "material": "wood",
+    "color": "brown",
+    "size": "large",
+    "storage": true,
+    "images": [
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp"
+    ],
+    "description": "Spacious brown dresser with 6 drawers, perfect for organizing bedroom essentials."
+  },
+  {
+    "id": 108,
+    "name": "Queen Upholstered Bed with Headboard Storage",
+    "price": 1099,
+    "material": "upholstered",
+    "color": "beige",
+    "size": "queen",
+    "storage": true,
+    "images": [
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp"
+    ],
+    "description": "Beige queen upholstered bed with hidden headboard compartments for storage."
+  },
+  {
+    "id": 109,
+    "name": "Twin Metal Bunk Bed",
+    "price": 549,
+    "material": "metal",
+    "color": "black",
+    "size": "twin",
+    "storage": false,
+    "images": [
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp"
+    ],
+    "description": "Durable black twin-size bunk bed with a modern metal frame."
+  },
+  {
+    "id": 110,
+    "name": "King Wooden Canopy Bed",
+    "price": 1399,
+    "material": "wood",
+    "color": "brown",
+    "size": "king",
+    "storage": false,
+    "images": [
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp",
+      "/pages/bedroom/imgbedroom/bedroom1.webp"
+    ],
+    "description": "Luxurious brown king canopy bed made of solid wood with a rustic touch."
+  }
+]

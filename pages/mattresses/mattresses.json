@@ -1,0 +1,172 @@
+[
+  {
+    "id": 1,
+    "name": "Memory Foam Twin Mattress",
+    "price": 399,
+    "size": "twin",
+    "firmness": "medium",
+    "thickness": "10 inch",
+    "material": "memory foam",
+    "images": [
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp"
+    ],
+    "description": "Comfortable twin mattress with medium firmness and 10-inch profile."
+  },
+  {
+    "id": 2,
+    "name": "Hybrid Queen Mattress",
+    "price": 799,
+    "size": "queen",
+    "firmness": "medium-firm",
+    "thickness": "12 inch",
+    "material": "hybrid",
+    "images": [
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp"
+    ],
+    "description": "Queen size hybrid mattress with pocket springs and foam layers."
+  },
+  {
+    "id": 3,
+    "name": "Luxury King Gel Memory Foam Mattress",
+    "price": 1299,
+    "size": "king",
+    "firmness": "soft",
+    "thickness": "14 inch",
+    "material": "gel memory foam",
+    "images": [
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp"
+    ],
+    "description": "Luxury king mattress with cooling gel memory foam."
+  },
+  {
+    "id": 4,
+    "name": "Classic Innerspring Full Mattress",
+    "price": 599,
+    "size": "full",
+    "firmness": "firm",
+    "thickness": "11 inch",
+    "material": "innerspring",
+    "images": [
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp"
+    ],
+    "description": "Durable full mattress with innerspring support."
+  },
+  {
+    "id": 5,
+    "name": "California King Hybrid Mattress",
+    "price": 1399,
+    "size": "california king",
+    "firmness": "medium",
+    "thickness": "13 inch",
+    "material": "hybrid",
+    "images": [
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp"
+    ],
+    "description": "Spacious California King hybrid mattress with balanced support."
+  },
+  {
+    "id": 6,
+    "name": "Plush Full Gel Mattress",
+    "price": 699,
+    "size": "full",
+    "firmness": "soft",
+    "thickness": "12 inch",
+    "material": "gel memory foam",
+    "images": [
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp"
+    ],
+    "description": "Soft full-size mattress with gel-infused foam for cooling."
+  },
+  {
+    "id": 7,
+    "name": "Budget Twin Innerspring Mattress",
+    "price": 299,
+    "size": "twin",
+    "firmness": "firm",
+    "thickness": "8 inch",
+    "material": "innerspring",
+    "images": [
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp"
+    ],
+    "description": "Affordable twin mattress with firm innerspring support."
+  },
+  {
+    "id": 8,
+    "name": "Deluxe Queen Hybrid Mattress",
+    "price": 899,
+    "size": "queen",
+    "firmness": "medium",
+    "thickness": "12 inch",
+    "material": "hybrid",
+    "images": [
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp"
+    ],
+    "description": "Balanced support and comfort in a deluxe queen hybrid mattress."
+  },
+  {
+    "id": 9,
+    "name": "Premium King Pillow Top Mattress",
+    "price": 1599,
+    "size": "king",
+    "firmness": "medium-soft",
+    "thickness": "15 inch",
+    "material": "hybrid",
+    "images": [
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp"
+    ],
+    "description": "Premium pillow-top king mattress for ultimate comfort."
+  },
+  {
+    "id": 10,
+    "name": "Eco-Friendly Organic Queen Mattress",
+    "price": 1099,
+    "size": "queen",
+    "firmness": "medium",
+    "thickness": "12 inch",
+    "material": "organic cotton & latex",
+    "images": [
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp",
+      "/pages/mattresses/imgmattresses/mattresses1.webp"
+    ],
+    "description": "Sustainable queen mattress made with organic materials."
+  }
+]

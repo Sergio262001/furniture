@@ -1,0 +1,172 @@
+[
+  {
+    "id": 1,
+    "name": "Modern Area Rug 8x10",
+    "price": 299,
+    "size": "large",
+    "material": "wool",
+    "color": "gray",
+    "style": "modern",
+    "images": [
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp"
+    ],
+    "description": "Large modern wool rug with geometric pattern."
+  },
+  {
+    "id": 2,
+    "name": "Shaggy Plush Rug 5x7",
+    "price": 179,
+    "size": "medium",
+    "material": "synthetic",
+    "color": "white",
+    "style": "bohemian",
+    "images": [
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp"
+    ],
+    "description": "Soft shaggy rug perfect for cozy living spaces."
+  },
+  {
+    "id": 3,
+    "name": "Traditional Persian Style Rug",
+    "price": 499,
+    "size": "large",
+    "material": "wool",
+    "color": "red",
+    "style": "traditional",
+    "images": [
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp"
+    ],
+    "description": "Handcrafted Persian style rug with rich red tones."
+  },
+  {
+    "id": 4,
+    "name": "Small Entryway Rug 2x3",
+    "price": 59,
+    "size": "small",
+    "material": "cotton",
+    "color": "blue",
+    "style": "minimalist",
+    "images": [
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp"
+    ],
+    "description": "Compact blue cotton rug, ideal for entryways."
+  },
+  {
+    "id": 5,
+    "name": "Round Boho Rug 6ft",
+    "price": 229,
+    "size": "medium",
+    "material": "jute",
+    "color": "beige",
+    "style": "bohemian",
+    "images": [
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp"
+    ],
+    "description": "Round jute rug with bohemian pattern, perfect for cozy spaces."
+  },
+  {
+    "id": 6,
+    "name": "Luxury Silk Rug 9x12",
+    "price": 899,
+    "size": "extra large",
+    "material": "silk",
+    "color": "gold",
+    "style": "luxury",
+    "images": [
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp"
+    ],
+    "description": "Handwoven luxury silk rug with intricate golden patterns."
+  },
+  {
+    "id": 7,
+    "name": "Kids Playroom Rug",
+    "price": 139,
+    "size": "small",
+    "material": "synthetic",
+    "color": "multicolor",
+    "style": "playful",
+    "images": [
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp"
+    ],
+    "description": "Colorful multicolor rug designed for kids’ playrooms."
+  },
+  {
+    "id": 8,
+    "name": "Minimalist Beige Rug",
+    "price": 199,
+    "size": "medium",
+    "material": "cotton",
+    "color": "beige",
+    "style": "minimalist",
+    "images": [
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp"
+    ],
+    "description": "Neutral beige cotton rug for modern minimalist interiors."
+  },
+  {
+    "id": 9,
+    "name": "Outdoor Patio Rug",
+    "price": 259,
+    "size": "large",
+    "material": "polypropylene",
+    "color": "gray",
+    "style": "outdoor",
+    "images": [
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp"
+    ],
+    "description": "Weather-resistant gray rug designed for patios and outdoor spaces."
+  },
+  {
+    "id": 10,
+    "name": "Luxury Shag Rug",
+    "price": 329,
+    "size": "large",
+    "material": "synthetic",
+    "color": "cream",
+    "style": "shag",
+    "images": [
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp",
+      "/pages/rugs/imgrugs/rugs1.webp"
+    ],
+    "description": "Plush cream shag rug offering comfort and elegance."
+  }
+]

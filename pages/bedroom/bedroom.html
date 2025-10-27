@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bedroom</title>
+
+  <!-- Rutas relativas seguras -->
+  <link rel="stylesheet" href="../../style.css" />
+  <script type="module" src="../../js/firebase.js"></script>
+</head>
+<body>
+
+  <!-- 🔹 TOP BAR -->
+  <div class="top-bar">
+    <div>📍 Furniture store in Fairfield, OH | 🚚 Delivering to <strong>0000</strong></div>
+    <div>
+      <a href="../../login.html" data-login-link>Login</a>
+      <a href="#" data-logout-link style="display:none" onclick="FB.logout()">Logout</a>
+      <a href="#" id="financing-btn">Financing</a>
+      <a href="#" id="help-btn">Help</a>
+      <a href="../../cart.html">🛒 (<span id="cart-count">0</span>)</a>
+      <span data-user-badge style="margin-left:8px;opacity:.8">Invitado</span>
+    </div>
+  </div>
+
+  <!-- 🔹 HEADER -->
+  <div class="header">
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search bedroom products..." />
+    </div>
+    <div class="logo">
+      <a href="../../index.html"><img src="../../logo.jfif" alt="Logo" /></a>
+    </div>
+    <div>📞 Shop by phone 000-000-0000</div>
+  </div>
+
+  <!-- 🔹 NAV -->
+  <div class="nav">
+    <a href="../livingroom/livingroom.html">LIVING ROOM</a>
+    <a class="active" href="bedroom.html">BEDROOM</a>
+    <a href="../dining/dining.html">DINING</a>
+    <a href="../mattresses/mattresses.html">MATTRESSES</a>
+    <a href="../outdoor/outdoor.html">OUTDOOR</a>
+    <a href="../kids/kids.html">BABY & KIDS</a>
+    <a href="../rugs/rugs.html">RUGS</a>
+    <a href="../accents/accents.html">ACCENTS & DECOR</a>
+  </div>
+
+  <!-- 🔹 CONTENT -->
+  <div class="content">
+    <button id="filter-toggle" class="filter-toggle" onclick="toggleFilters()">☰ Filters</button>
+
+    <aside id="filters" class="filters">
+      <div class="filters-header">
+        <strong>Filters</strong>
+        <button class="filters-close-btn" type="button" aria-label="Close">✕</button>
+      </div>
+
+      <label for="minPriceFilter">Min Price:</label>
+      <input type="number" id="minPriceFilter" placeholder="e.g. 100" />
+
+      <label for="maxPriceFilter">Max Price:</label>
+      <input type="number" id="maxPriceFilter" placeholder="e.g. 2000" />
+
+      <label for="typeFilter">Type:</label>
+      <select id="typeFilter">
+        <option value="">All</option>
+        <option value="bed">Bed</option>
+        <option value="dresser">Dresser</option>
+        <option value="nightstand">Nightstand</option>
+        <option value="mirror">Mirror</option>
+        <option value="set">Set</option>
+      </select>
+
+      <label for="styleFilter">Style:</label>
+      <select id="styleFilter">
+        <option value="">All</option>
+        <option value="modern">Modern</option>
+        <option value="classic">Classic</option>
+        <option value="rustic">Rustic</option>
+        <option value="contemporary">Contemporary</option>
+      </select>
+
+      <label for="priceRangeFilter">Price range:</label>
+      <select id="priceRangeFilter">
+        <option value="">All</option>
+        <option value="low">Under $300</option>
+        <option value="mid">$300 - $800</option>
+        <option value="high">Over $800</option>
+      </select>
+
+      <button onclick="applyFilters()">Apply Filters</button>
+    </aside>
+
+    <div class="products" id="products"></div>
+  </div>
+
+  <div class="chat">💬 Chat With Us</div>
+
+  <script>
+    // ========== FUNCIONES GLOBALES ==========
+    const get = (o, en, es, fallback) => (o ? (o[en] ?? o[es] ?? fallback) : fallback);
+    const escapeHtml = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const priceRangeFromPrice = (p) => (p < 300 ? "low" : p <= 800 ? "mid" : "high");
+
+    const normalizeImage = (p) => {
+      if (!p) return '../../imgpromo/placeholder.jpg';
+      if (/^https?:\/\//i.test(p) || p.startsWith('../../')) return p;
+      return '../../' + p.replace(/^\/+/, '');
+    };
+
+    let DATA = [];
+
+    // Carga de JSON local
+    fetch('bedroom.json')
+      .then(res => {
+        if (!res.ok) throw new Error("Error loading bedroom.json (" + res.status + ")");
+        return res.json();
+      })
+      .then(data => {
+        DATA = Array.isArray(data) ? data : [];
+        renderProducts(DATA);
+        document.getElementById("searchInput").addEventListener("input", applyFilters);
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById("products").innerHTML =
+          "<p style='padding:20px;color:#c00'>Error loading products. Check console.</p>";
+      });
+
+    function renderProducts(list) {
+      const container = document.getElementById("products");
+      container.innerHTML = "";
+
+      if (!list?.length) {
+        container.innerHTML = "<p class='no-results'>No products found.</p>";
+        return;
+      }
+
+      list.forEach(prod => {
+        const id = get(prod, "id", "id", "");
+        const name = get(prod, "name", "nombre", "No name");
+        const price = Number(get(prod, "price", "precio", 0));
+        const images = get(prod, "images", "imagenes", null) || [];
+        const image = (Array.isArray(images) && images.length) ? normalizeImage(images[0]) : '../../imgpromo/placeholder.jpg';
+
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <a href="../../producto.html?id=${encodeURIComponent(id)}&cat=bedroom">
+            <img src="${escapeHtml(image)}" alt="${escapeHtml(name)}">
+            <h3>${escapeHtml(name)}</h3>
+            <p>$${price.toFixed(2)}</p>
+          </a>
+          <button class="buy-btn"
+                  data-id="${escapeHtml(id)}"
+                  data-name="${escapeHtml(name)}"
+                  data-price="${price}"
+                  data-image="${escapeHtml(image)}">🛒 Buy</button>
+        `;
+        container.appendChild(card);
+      });
+
+      container.addEventListener("click", e => {
+        if (e.target.matches(".buy-btn")) {
+          const btn = e.target;
+          addToCart(btn.dataset.id, btn.dataset.name, Number(btn.dataset.price), btn.dataset.image);
+        }
+      });
+    }
+
+    function applyFilters() {
+      const min = parseFloat(document.getElementById("minPriceFilter").value) || 0;
+      const max = parseFloat(document.getElementById("maxPriceFilter").value) || Infinity;
+      const typeFilter = document.getElementById("typeFilter").value.toLowerCase();
+      const styleFilter = document.getElementById("styleFilter").value.toLowerCase();
+      const priceRangeFilter = document.getElementById("priceRangeFilter").value.toLowerCase();
+      const searchText = document.getElementById("searchInput").value.trim().toLowerCase();
+
+      const filtered = DATA.filter(p => {
+        const price = Number(get(p, "price", "precio", 0));
+        if (isNaN(price) || price < min || price > max) return false;
+
+        const type = String(get(p, "type", "tipo", "")).toLowerCase();
+        const style = String(get(p, "style", "estilo", "")).toLowerCase();
+        const pr = String(get(p, "priceRange", "price_range", "") || priceRangeFromPrice(price)).toLowerCase();
+
+        if (typeFilter && typeFilter !== type) return false;
+        if (styleFilter && styleFilter !== style) return false;
+        if (priceRangeFilter && priceRangeFilter !== pr) return false;
+
+        if (searchText) {
+          const name = String(get(p, "name", "nombre", "")).toLowerCase();
+          const description = String(get(p, "description", "descripcion", "")).toLowerCase();
+          if (!name.includes(searchText) && !description.includes(searchText)) return false;
+        }
+        return true;
+      });
+
+      renderProducts(filtered);
+    }
+
+    function toggleFilters() {
+      document.getElementById("filters").classList.toggle("open");
+    }
+
+    // 🛒 Carrito
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    function updateCartCount() {
+      const el = document.getElementById("cart-count");
+      if (el) el.textContent = (cart || []).reduce((s, i) => s + Number(i.quantity || 0), 0);
+    }
+    function lsSet(items) {
+      localStorage.setItem("cart", JSON.stringify(items));
+      updateCartCount();
+    }
+
+    async function addToCart(id, name, price, image) {
+      const item = { id, name, price: Number(price || 0), image: image || "", quantity: 1 };
+      const useFirebase = window.FB && FB.auth && FB.auth.currentUser && typeof FB.addToCart === "function";
+      try {
+        if (useFirebase) await FB.addToCart(item);
+        else {
+          const found = cart.find(p => String(p.id) === String(id));
+          if (found) found.quantity++;
+          else cart.push(item);
+          lsSet(cart);
+        }
+        alert(name + " added to cart ✅");
+      } catch (e) {
+        console.error(e);
+        alert("Error adding to cart: " + (e.message || e));
+      }
+    }
+
+    window.onload = updateCartCount;
+    window.addEventListener("storage", (e) => {
+      if (e.key === "cart") {
+        cart = JSON.parse(localStorage.getItem("cart")) || [];
+        updateCartCount();
+      }
+    });
+  </script>
+
+  <!-- Scripts comunes -->
+  <script src="../../js/modals.js" defer></script>
+  <script src="../../js/chat-widget.js" defer></script>
+</body>
+</html>
