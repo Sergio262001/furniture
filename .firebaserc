@@ -1,6 +1,5 @@
-# Lista tus proyectos para ver el projectId
-firebase projects:list
-
-# Asocia el actual (reemplaza PROJECT_ID por el tuyo)
-firebase use --add PROJECT_ID
-# te pedirá un alias, por ejemplo: default
+{
+  "projects": {
+    "default": "furniture-online-store-834bf"
+  }
+}
