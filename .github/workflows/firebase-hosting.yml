@@ -1,0 +1,26 @@
+name: Deploy to Firebase Hosting
+
+on:
+  push:
+    branches: [ main ]   # cambia si usas otra rama
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar Firebase CLI
+        run: npm i -g firebase-tools
+
+      - name: Deploy (push a main → producción)
+        if: github.event_name == 'push'
+        run: firebase deploy --only hosting --project furniture-online-store-834bf --non-interactive --token "${{ secrets.FIREBASE_TOKEN }}"
+
+      - name: Preview (PRs → canal efímero)
+        if: github.event_name == 'pull_request'
+        run: |
+          CHANNEL="pr-${{ github.event.number }}"
+          firebase hosting:channel:deploy "$CHANNEL" --project furniture-online-store-834bf --expires 7d --non-interactive --token "${{ secrets.FIREBASE_TOKEN }}"
