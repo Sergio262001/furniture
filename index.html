@@ -11,23 +11,48 @@
 </head>
 
 <body>
-  <!-- Barra superior -->
-  <div class="top-bar">
-    <div>📍 Furniture store in Fairfield, OH | 🚚 Delivering to <strong>0000</strong></div>
-    <div>
-      <!-- Login / Logout controlados por Firebase -->
-      <a href="login.html" data-login-link>Login</a>
-      <a href="#" data-logout-link style="display:none" onclick="FB.logout()">Logout</a>
+ <!-- Barra superior -->
+<div class="top-bar">
+  <div>📍 Furniture store in Fairfield, OH | 🚚 Delivering to <strong>0000</strong></div>
 
-      <!-- Otros enlaces -->
-      <a href="#" id="financing-btn">Financing</a>
-      <a href="#" id="help-btn">Help</a>
-      <a href="cart.html">🛒 (<span id="cart-count">0</span>)</a>
+  <div style="display:flex;align-items:center;gap:12px">
+    <!-- Login / Logout (Firebase controla visibilidad) -->
+    <a href="login.html" data-login-link>Login</a>
 
-      <!-- Badge de usuario -->
-      <span data-user-badge style="margin-left:8px;opacity:.8">Invitado</span>
+    <!-- Menú de usuario -->
+    <div id="user-menu-container" style="position:relative;display:none" data-auth="in">
+      <button id="user-menu-button" class="user-btn" style="background:none;border:0;color:#fff;cursor:pointer;font-weight:500;display:flex;align-items:center;gap:6px">
+        <img id="user-avatar" src="img/avatar-default.png" alt="User" style="width:22px;height:22px;border-radius:50%;object-fit:cover;">
+        <span id="user-name">Cuenta</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M1.5 5.5l6 6 6-6H1.5z"/></svg>
+      </button>
+
+      <!-- Dropdown -->
+      <div id="user-dropdown" style="display:none;position:absolute;right:0;top:34px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.1);padding:12px;width:240px;z-index:1000">
+        <div style="display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid #f3f4f6;">
+          <img id="dropdown-avatar" src="img/avatar-default.png" alt="avatar" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+          <div>
+            <strong id="dropdown-name" style="display:block;">Usuario</strong>
+            <small id="dropdown-email" style="color:#6b7280;font-size:.8rem;">user@email.com</small>
+          </div>
+        </div>
+        <ul style="list-style:none;padding:8px 0;margin:0;">
+          <li><a href="account.html" style="display:block;padding:8px 10px;color:#111827;text-decoration:none;border-radius:8px;">🧾 Mi perfil</a></li>
+          <li id="reset-link" style="display:none;"><a href="#" style="display:block;padding:8px 10px;color:#111827;text-decoration:none;border-radius:8px;">🔑 Cambiar contraseña</a></li>
+          <li><a href="#" id="logout-link" style="display:block;padding:8px 10px;color:#b91c1c;text-decoration:none;border-radius:8px;">🚪 Cerrar sesión</a></li>
+        </ul>
+      </div>
     </div>
+
+    <!-- Otros enlaces -->
+    <a href="#" id="financing-btn">Financing</a>
+    <a href="#" id="help-btn">Help</a>
+    <a href="cart.html">🛒 (<span id="cart-count">0</span>)</a>
+
+    <!-- Badge (fallback cuando no hay sesión) -->
+    <span data-user-badge style="margin-left:8px;opacity:.8">Invitado</span>
   </div>
+</div>
 
   <!-- Logo + buscador -->
   <div class="header">
@@ -103,8 +128,81 @@
     <script type="module" src="js/firebase.js"></script>
     <!-- Script específico del login -->
     <script type="module" src="js/auth.js"></script>
-  </body>
-  </html>
 
+
+      <!-- ... resto de tu contenido -->
+
+  <!-- Firebase base -->
+  <script type="module" src="js/firebase.js"></script>
+
+  <!-- Script del menú desplegable de usuario -->
+  <script type="module">
+    import { onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    const { auth } = window.FB;
+
+    const loginLink  = document.querySelector('[data-login-link]');
+    const badge      = document.querySelector('[data-user-badge]');
+    const menuWrap   = document.getElementById('user-menu-container');
+    const btn        = document.getElementById('user-menu-button');
+    const dropdown   = document.getElementById('user-dropdown');
+    const nameTop    = document.getElementById('user-name');
+    const avatarTop  = document.getElementById('user-avatar');
+    const nameDrop   = document.getElementById('dropdown-name');
+    const emailDrop  = document.getElementById('dropdown-email');
+    const avatarDrop = document.getElementById('dropdown-avatar');
+    const resetLi    = document.getElementById('reset-link');
+    const logoutA    = document.getElementById('logout-link');
+
+    // Toggle dropdown
+    btn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    });
+    document.addEventListener('click', () => dropdown.style.display = 'none');
+
+    // Pinta datos y controla visibilidad login/menú
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const name  = user.displayName || 'Mi cuenta';
+        const email = user.email || '';
+        const photo = user.photoURL || 'img/avatar-default.png';
+
+        if (badge) badge.textContent = name;
+        if (loginLink) loginLink.style.display = 'none';
+        menuWrap.style.display = 'inline-block';
+
+        nameTop.textContent = name.split(' ')[0];
+        avatarTop.src = photo;
+        nameDrop.textContent = name;
+        emailDrop.textContent = email;
+        avatarDrop.src = photo;
+
+        const providerId = (user.providerData[0]?.providerId) || 'password';
+        resetLi.style.display = providerId === 'password' ? '' : 'none';
+      } else {
+        if (badge) badge.textContent = 'Invitado';
+        if (loginLink) loginLink.style.display = '';
+        menuWrap.style.display = 'none';
+        dropdown.style.display = 'none';
+      }
+    });
+
+    // Logout
+    logoutA?.addEventListener('click', async (e) => {
+      e.preventDefault();
+      await window.FB.logout();
+      location.href = 'index.html';
+    });
+
+    // Reset password
+    resetLi?.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+      if (user?.email) {
+        await sendPasswordResetEmail(auth, user.email);
+        alert('Te enviamos un correo para cambiar la contraseña.');
+      }
+    });
+  </script>
 </body>
 </html>

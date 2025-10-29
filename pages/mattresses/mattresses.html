@@ -305,11 +305,83 @@
     })();
   </script>
 
-    <!-- Firebase base -->
-    <script type="module" src="js/firebase.js"></script>
-    <!-- Script específico del login -->
-    <script type="module" src="js/auth.js"></script>
-  </body>
-  </html>
+   <!-- ... contenido de la página ... -->
+
+  <!-- Firebase base -->
+  <script type="module" src="js/firebase.js"></script>
+  <!-- ... resto de tu contenido -->
+
+  <!-- Firebase base -->
+  <script type="module" src="js/firebase.js"></script>
+
+  <!-- Script del menú desplegable de usuario -->
+  <script type="module">
+    import { onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    const { auth } = window.FB;
+
+    const loginLink  = document.querySelector('[data-login-link]');
+    const badge      = document.querySelector('[data-user-badge]');
+    const menuWrap   = document.getElementById('user-menu-container');
+    const btn        = document.getElementById('user-menu-button');
+    const dropdown   = document.getElementById('user-dropdown');
+    const nameTop    = document.getElementById('user-name');
+    const avatarTop  = document.getElementById('user-avatar');
+    const nameDrop   = document.getElementById('dropdown-name');
+    const emailDrop  = document.getElementById('dropdown-email');
+    const avatarDrop = document.getElementById('dropdown-avatar');
+    const resetLi    = document.getElementById('reset-link');
+    const logoutA    = document.getElementById('logout-link');
+
+    // Toggle dropdown
+    btn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    });
+    document.addEventListener('click', () => dropdown.style.display = 'none');
+
+    // Pinta datos y controla visibilidad login/menú
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const name  = user.displayName || 'Mi cuenta';
+        const email = user.email || '';
+        const photo = user.photoURL || 'img/avatar-default.png';
+
+        if (badge) badge.textContent = name;
+        if (loginLink) loginLink.style.display = 'none';
+        menuWrap.style.display = 'inline-block';
+
+        nameTop.textContent = name.split(' ')[0];
+        avatarTop.src = photo;
+        nameDrop.textContent = name;
+        emailDrop.textContent = email;
+        avatarDrop.src = photo;
+
+        const providerId = (user.providerData[0]?.providerId) || 'password';
+        resetLi.style.display = providerId === 'password' ? '' : 'none';
+      } else {
+        if (badge) badge.textContent = 'Invitado';
+        if (loginLink) loginLink.style.display = '';
+        menuWrap.style.display = 'none';
+        dropdown.style.display = 'none';
+      }
+    });
+
+    // Logout
+    logoutA?.addEventListener('click', async (e) => {
+      e.preventDefault();
+      await window.FB.logout();
+      location.href = 'index.html';
+    });
+
+    // Reset password
+    resetLi?.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+      if (user?.email) {
+        await sendPasswordResetEmail(auth, user.email);
+        alert('Te enviamos un correo para cambiar la contraseña.');
+      }
+    });
+  </script>
 </body>
 </html>
