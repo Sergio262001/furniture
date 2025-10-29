@@ -1,22 +1,19 @@
 {
+  "projects": {
+    "default": "furniture-online-store-834bf"
+  },
   "hosting": {
-    "public": "(public)",
+    "public": ".",
     "ignore": [
       "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
+      ".firebaserc",
+      "**/node_modules/**",
+      "**/.git/**"
     ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
+    "cleanUrls": true
   },
   "firestore": {
-    "database": "(default)",
-    "location": "nam5",
-    "rules": "(firestore.rules)",
-    "indexes": "(firestore.indexes.json)"
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
   }
 }
