@@ -18,14 +18,14 @@ import {
 // TU CONFIG (cámbiala en Firebase Console → Project settings → Web app)
 // ==========================
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_PROJECT_ID.firebaseapp.com",
-  projectId: "TU_PROJECT_ID",
-  storageBucket: "TU_PROJECT_ID.appspot.com",
-  messagingSenderId: "XXXXXXXXXXXX",
-  appId: "1:XXXXXXXXXXXX:web:YYYYYYYYYYYY"
+  apiKey: "AIzaSyDxxxxx_xxxxx",
+  authDomain: "furniture-online-store-834bf.firebaseapp.com",
+  projectId: "furniture-online-store-834bf",
+  storageBucket: "furniture-online-store-834bf.appspot.com",
+  messagingSenderId: "1084583047",
+  appId: "1:1084583047:web:xxxxxx",
+  measurementId: "G-XXXXXX"
 };
-
 // Init
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -102,4 +102,6 @@ onAuthStateChanged(auth, (user) => {
   document.querySelectorAll("[data-logout-link]").forEach(a => a.style.display = user ? "" : "none");
   const badge = document.querySelector("[data-user-badge]");
   if (badge) badge.textContent = user ? (user.displayName || user.email || "Cuenta") : "Invitado";
+
 });
+
