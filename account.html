@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>My Account | Furniture</title>
+
+  <!-- BASE dinámico: GitHub Pages vs Hosting (Firebase/otros) -->
+  <script>
+    (function () {
+      var REPO_SLUG = 'furniture';
+      var isGH = /github\.io$/i.test(location.hostname);
+      var base = document.createElement('base');
+      base.href = isGH ? '/' + REPO_SLUG + '/' : '/';
+      document.head.prepend(base);
+      if (isGH && !location.pathname.startsWith('/' + REPO_SLUG + '/')) {
+        location.replace('/' + REPO_SLUG + location.pathname + location.search + location.hash);
+      }
+    })();
+  </script>
+
+  <!-- Tu CSS global (ajústalo a tu ruta) -->
+  <link rel="stylesheet" href="style.css"/>
+
+  <style>
+    /* Estilos mínimos para que quede decente aun sin tu CSS */
+    .container{max-width:960px;margin:24px auto;padding:0 16px}
+    .card{background:#fff;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:24px}
+    .row{display:grid;grid-template-columns:120px 1fr;gap:24px}
+    .avatar{width:96px;height:96px;border-radius:50%;object-fit:cover;background:#f4f4f5}
+    .muted{color:#6b7280;font-size:.95rem}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+    label{display:block;font-weight:600;margin:12px 0 6px}
+    input[type="text"],input[readonly]{width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px}
+    .btn{border:0;border-radius:12px;padding:12px 16px;cursor:pointer}
+    .btn-primary{background:#dc2626;color:#fff}
+    .btn-outline{background:#fff;border:1px solid #e5e7eb}
+    .badge{display:inline-block;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:999px;padding:4px 10px;font-size:.85rem}
+    .section{margin-top:28px}
+    .header{display:flex;justify-content:space-between;align-items:center;margin:12px 0 24px}
+    nav a{margin-right:16px;text-decoration:none;color:#111827}
+    .error{color:#b91c1c;margin-top:8px}
+    .success{color:#065f46;margin-top:8px}
+  </style>
+</head>
+<body>
+  <!-- Topbar simple -->
+  <header class="container">
+    <div class="header">
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="cart.html">Cart</a>
+        <a href="account.html" class="badge">My Account</a>
+      </nav>
+      <div>
+        <span class="muted" data-user-badge>Invitado</span>
+        <a href="login.html" data-login-link class="btn btn-outline">Log in</a>
+        <button data-logout-link class="btn btn-outline" style="display:none">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="card">
+      <h1>My Account</h1>
+      <p class="muted">Manage your profile and sign-in settings.</p>
+
+      <!-- Perfil -->
+      <div class="section row">
+        <div>
+          <img id="avatar" class="avatar" src="img/avatar-default.png" alt="Avatar">
+        </div>
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <strong id="displayNameLabel">—</strong>
+            <span id="providerBadge" class="badge">—</span>
+          </div>
+
+          <label for="displayName">Display name</label>
+          <input id="displayName" type="text" placeholder="Your name">
+
+          <label for="email">Email</label>
+          <input id="email" type="text" readonly>
+
+          <div class="actions">
+            <button id="saveBtn" class="btn btn-primary">Save changes</button>
+            <button id="logoutBtn" class="btn btn-outline">Log out</button>
+            <button id="resetBtn" class="btn btn-outline" style="display:none">Reset password</button>
+          </div>
+
+          <div id="msg" class="muted"></div>
+        </div>
+      </div>
+
+      <!-- (Opcional) Resumen de carrito del user -->
+      <div class="section">
+        <h3>Quick summary</h3>
+        <p class="muted" id="cartSummary">Cart: 0 items</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Firebase base -->
+  <script type="module" src="js/firebase.js"></script>
+
+  <!-- Lógica de la página -->
+  <script type="module">
+    // Usamos la API expuesta en window.FB por js/firebase.js
+    const { auth, getCart, saveProfile } = window.FB;
+
+    const $ = (s) => document.querySelector(s);
+    const msg = $("#msg");
+    function setMsg(text, type="") {
+      msg.textContent = text || "";
+      msg.className = type === "error" ? "error" : (type === "success" ? "success" : "muted");
+    }
+
+    // Render inicial + redirección si no hay sesión
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        // No sesión: redirigimos a login
+        location.href = "login.html";
+        return;
+      }
+      // Render perfil
+      $("#avatar").src = user.photoURL || "img/avatar-default.png";
+      $("#displayName").value = user.displayName || "";
+      $("#displayNameLabel").textContent = user.displayName || user.email || "Account";
+      $("#email").value = user.email || "";
+
+      // Proveedor
+      const providerId = (user.providerData[0]?.providerId) || "password";
+      const map = { "google.com": "Google", "password": "Email/Password" };
+      $("#providerBadge").textContent = map[providerId] || providerId;
+
+      // Botón Reset password solo para Email/Password
+      if (providerId === "password") $("#resetBtn").style.display = "";
+
+      // Resumen de carrito
+      try {
+        const items = await getCart();
+        $("#cartSummary").textContent = `Cart: ${items.length} item${items.length===1?"":"s"}`;
+      } catch { /* ignore */ }
+    });
+
+    // Guardar cambios
+    $("#saveBtn").addEventListener("click", async () => {
+      setMsg("");
+      const displayName = $("#displayName").value.trim();
+      try {
+        await saveProfile({ displayName });
+        $("#displayNameLabel").textContent = displayName || $("#email").value;
+        setMsg("Profile updated.", "success");
+      } catch (e) {
+        setMsg(e.message, "error");
+      }
+    });
+
+    // Logout (dos botones: el de la cabecera y el de la tarjeta)
+    const logout = async () => { try { await window.FB.logout(); } finally { location.href = "index.html"; } };
+    $("#logoutBtn").addEventListener("click", logout);
+    document.querySelector("[data-logout-link]").addEventListener("click", logout);
+
+    // Reset password
+    $("#resetBtn").addEventListener("click", async () => {
+      const email = $("#email").value;
+      try {
+        await window.FB.resetPassword(email);
+        setMsg("We sent you a password reset email.", "success");
+      } catch (e) {
+        setMsg(e.message, "error");
+      }
+    });
+  </script>
+</body>
+</html>

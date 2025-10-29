@@ -1,38 +1,43 @@
 // ==========================
-// Firebase SDK (v9 modular)
+// Firebase SDK (v9 modular) - CDN
 // ==========================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import {
   getAuth, onAuthStateChanged,
   signInWithEmailAndPassword, createUserWithEmailAndPassword,
   signOut, GoogleAuthProvider, signInWithPopup,
-  sendPasswordResetEmail, updateProfile
+  sendPasswordResetEmail, updateProfile, setPersistence, browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-
 import {
-  getFirestore, doc, getDoc, setDoc, updateDoc,
-  serverTimestamp
+  getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 // ==========================
-// TU CONFIG (cámbiala en Firebase Console → Project settings → Web app)
+// Config de TU app web
+// (copiada de Configuración del proyecto → Tu app web)
 // ==========================
 const firebaseConfig = {
-  apiKey: "AIzaSyDxxxxx_xxxxx",
+  apiKey: "AIzaSyBqnXFn0pYtDkIyPvfwXmceFqdBtUoUnpU",
   authDomain: "furniture-online-store-834bf.firebaseapp.com",
   projectId: "furniture-online-store-834bf",
-  storageBucket: "furniture-online-store-834bf.appspot.com",
-  messagingSenderId: "1084583047",
-  appId: "1:1084583047:web:xxxxxx",
-  measurementId: "G-XXXXXX"
+  storageBucket: "furniture-online-store-834bf.appspot.com", // ✅ appspot.com
+  messagingSenderId: "575738362941",
+  appId: "1:575738362941:web:18f655767a934cfbbb7e54"
 };
-// Init
+
+// ==========================
+// Init (una sola vez)
+// ==========================
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
+await setPersistence(auth, browserLocalPersistence);
+
+const googleProvider = new GoogleAuthProvider();
+// googleProvider.setCustomParameters({ prompt: "select_account" });
 
 // ==========================
-// Helpers
+// Helpers de carrito / perfil
 // ==========================
 async function ensureCartRef() {
   const u = auth.currentUser;
@@ -50,7 +55,7 @@ async function addToCart(item) {
   if (!u) { alert("Inicia sesión para agregar al carrito."); return; }
   const ref = await ensureCartRef();
   const snap = await getDoc(ref);
-  const cart = snap.data() || { items: [] };
+  const cart = snap.exists() ? snap.data() : { items: [] };
   const idx = cart.items.findIndex(x => String(x.id) === String(item.id));
   if (idx >= 0) cart.items[idx].quantity += (item.quantity || 1);
   else cart.items.push({ ...item, quantity: item.quantity || 1 });
@@ -80,13 +85,15 @@ async function saveProfile({ displayName }) {
   }
 }
 
-// Exponer en window
+// ==========================
+// API pública para tus páginas
+// ==========================
 window.FB = {
   app, auth, db,
   // Auth
   loginEmail: (email, pass) => signInWithEmailAndPassword(auth, email, pass),
   registerEmail: (email, pass) => createUserWithEmailAndPassword(auth, email, pass),
-  loginGoogle: () => signInWithPopup(auth, new GoogleAuthProvider()),
+  loginGoogle: () => signInWithPopup(auth, googleProvider),
   logout: () => signOut(auth),
   resetPassword: (email) => sendPasswordResetEmail(auth, email),
   saveProfile,
@@ -96,12 +103,12 @@ window.FB = {
   getCart
 };
 
-// UI reactiva para top bar
+// ==========================
+// UI reactiva para la top bar (login/perfil)
+// ==========================
 onAuthStateChanged(auth, (user) => {
   document.querySelectorAll("[data-login-link]").forEach(a => a.style.display = user ? "none" : "");
   document.querySelectorAll("[data-logout-link]").forEach(a => a.style.display = user ? "" : "none");
   const badge = document.querySelector("[data-user-badge]");
   if (badge) badge.textContent = user ? (user.displayName || user.email || "Cuenta") : "Invitado";
-
 });
-
