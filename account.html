@@ -23,45 +23,64 @@
   <style>
     :root{--ring:#e5e7eb;--muted:#6b7280;--fg:#111827;--ok:#065f46;--err:#b91c1c;--brand:#dc2626}
     body{background:#f8fafc}
-    .container{max-width:960px;margin:24px auto;padding:0 16px}
-    .card{background:#fff;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:24px}
-    .row{display:grid;grid-template-columns:120px 1fr;gap:24px}
-    .avatar{width:96px;height:96px;border-radius:50%;object-fit:cover;background:#f4f4f5;border:1px solid var(--ring)}
-    .muted{color:var(--muted);font-size:.95rem}
-    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
-    label{display:block;font-weight:600;margin:12px 0 6px}
-    input[type="text"],input[readonly]{width:100%;padding:10px 12px;border:1px solid var(--ring);border-radius:10px}
-    .btn{border:0;border-radius:12px;padding:12px 16px;cursor:pointer}
+    .container{max-width:1080px;margin:24px auto;padding:0 16px}
+    .hero{background:linear-gradient(135deg,#fee2e2,#ffffff);border:1px solid #fecaca;border-radius:20px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px}
+    .hero h1{margin:0}
+    .hero .quick{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .btn{border:0;border-radius:12px;padding:10px 14px;cursor:pointer}
     .btn-primary{background:var(--brand);color:#fff}
     .btn-outline{background:#fff;border:1px solid var(--ring)}
+    .link{color:#111827;text-decoration:none;border:1px dashed var(--ring);border-radius:999px;padding:6px 10px}
+    .grid{display:grid;grid-template-columns:360px 1fr;gap:18px}
+    .card{background:#fff;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:18px}
+    .row{display:grid;grid-template-columns:120px 1fr;gap:18px}
+    .avatar-wrap{position:relative;width:120px}
+    .avatar{width:120px;height:120px;border-radius:50%;object-fit:cover;background:#f4f4f5;border:1px solid var(--ring)}
+    .muted{color:var(--muted);font-size:.95rem}
+    label{display:block;font-weight:600;margin:12px 0 6px}
+    input[type="text"],input[readonly]{width:100%;padding:10px 12px;border:1px solid var(--ring);border-radius:10px}
     .badge{display:inline-block;background:#f3f4f6;border:1px solid var(--ring);border-radius:999px;padding:4px 10px;font-size:.85rem}
-    .section{margin-top:28px}
-    .header{display:flex;justify-content:space-between;align-items:center;margin:12px 0 24px}
-    nav a{margin-right:16px;text-decoration:none;color:var(--fg)}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
     .error{color:var(--err);margin-top:8px}
     .success{color:var(--ok);margin-top:8px}
-    .kbd{border:1px solid var(--ring);border-bottom-width:2px;border-radius:8px;padding:2px 6px;display:inline-block;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
     .banner{display:none;margin-bottom:16px;padding:12px 14px;border:1px dashed #f59e0b;border-radius:12px;background:#fffbeb}
     .banner.show{display:flex;align-items:center;gap:12px;justify-content:space-between}
-    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-    .divider{height:1px;background:#e5e7eb;margin:20px 0}
-    .skeleton{background:linear-gradient(90deg,#f3f4f6, #e5e7eb, #f3f4f6);background-size:200% 100%;animation:shimmer 1.2s infinite;display:inline-block;border-radius:8px}
-    @keyframes shimmer{0%{background-position:-150% 0}100%{background-position:150% 0}}
+    .uploader{display:grid;gap:8px}
+    .progress{height:8px;background:#f3f4f6;border-radius:999px;overflow:hidden}
+    .progress>span{display:block;height:100%;background:#dc2626;width:0%}
+    /* dropdown */
+    .menu{position:relative}
+    .menu-btn{display:flex;align-items:center;gap:8px}
+    .menu-panel{display:none;position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--ring);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.08);min-width:180px;z-index:50}
+    .menu-item{display:block;padding:10px 12px;text-decoration:none;color:#111827;background:#fff;border:0;text-align:left;width:100%;cursor:pointer}
+    .menu-item:hover{background:#f9fafb}
   </style>
 </head>
 <body>
   <header class="container" aria-label="Top navigation">
-    <div class="header">
-      <nav>
-        <a href="index.html">Home</a>
-        <a href="products.html">Products</a>
-        <a href="cart.html">Cart</a>
-        <a href="account.html" aria-current="page" class="badge">My Account</a>
-      </nav>
+    <div class="hero">
       <div>
-        <span class="muted" data-user-badge>Invitado</span>
-        <a href="login.html" data-login-link class="btn btn-outline">Log in</a>
-        <button data-logout-link class="btn btn-outline" style="display:none">Log out</button>
+        <h1>My Account</h1>
+        <p class="muted">Profile, avatar and sign-in status.</p>
+      </div>
+      <div class="quick">
+        <a class="link" href="security.html">Security</a>
+        <a class="link" href="cart.html">Cart</a>
+        <a class="link" href="products.html">Shop</a>
+
+        <!-- User menu (avatar/name) -->
+        <div id="userMenu" class="menu">
+          <button id="userBtn" class="btn btn-outline menu-btn" type="button" aria-haspopup="menu" aria-expanded="false">
+            <img id="topAvatar" src="img/avatar-default.png" alt="" style="width:28px;height:28px;border-radius:999px;object-fit:cover;border:1px solid var(--ring)"/>
+            <span id="topName" class="muted">Account</span>
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7l5 5 5-5" stroke="#111827" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <div id="menuDropdown" class="menu-panel" role="menu" aria-label="User menu">
+            <a href="account.html" class="menu-item" role="menuitem">View profile</a>
+            <a href="security.html" class="menu-item" role="menuitem">Security</a>
+            <button id="menuLogout" class="menu-item" role="menuitem">Log out</button>
+          </div>
+        </div>
       </div>
     </div>
   </header>
@@ -72,71 +91,63 @@
         Your email is not verified. Check your inbox or
         <button id="resendLink" class="btn btn-outline" style="padding:6px 10px">Resend link</button>
       </span>
-      <span class="muted">Tip: If you can’t find it, search for <span class="kbd">no-reply@firebase</span>.</span>
+      <span class="muted">Tip: If you can’t find it, search for <b>no-reply@firebase</b>.</span>
     </div>
 
-    <div class="card" aria-busy="true">
-      <h1>My Account</h1>
-      <p class="muted">Manage your profile, sign-in methods and security.</p>
-
-      <!-- Perfil -->
-      <div class="section row">
-        <div>
-          <div id="avatarSk" class="skeleton" style="width:96px;height:96px"></div>
-          <img id="avatar" class="avatar" src="img/avatar-default.png" alt="Avatar" hidden>
+    <div class="grid">
+      <!-- Columna izquierda: Avatar & Provider -->
+      <section class="card">
+        <h3>Avatar</h3>
+        <div class="avatar-wrap">
+          <img id="avatar" class="avatar" src="img/avatar-default.png" alt="Avatar">
         </div>
-        <div>
-          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-            <strong id="displayNameLabel">—</strong>
-            <span id="providerBadge" class="badge">—</span>
-          </div>
-
-          <label for="displayName">Display name</label>
-          <input id="displayName" type="text" placeholder="Your name" autocomplete="name">
-
-          <label for="email">Email</label>
-          <input id="email" type="text" readonly>
-
+        <div class="uploader" style="margin-top:12px">
+          <input id="fileInput" type="file" accept="image/*">
           <div class="actions">
-            <button id="saveBtn" class="btn btn-primary">Save changes</button>
-            <button id="logoutBtn" class="btn btn-outline">Log out</button>
-            <button id="resetBtn" class="btn btn-outline" style="display:none">Reset password</button>
+            <button id="btnUpload" class="btn btn-outline">Upload photo</button>
+            <button id="btnRemovePhoto" class="btn btn-outline">Remove</button>
           </div>
-
-          <div id="msg" class="muted" role="alert"></div>
+          <div class="progress" aria-hidden="true"><span id="bar"></span></div>
+          <small class="muted">JPEG/PNG ≤ 2MB. We’ll resize if it’s too large.</small>
         </div>
-      </div>
+        <div style="margin-top:16px">
+          <span id="providerBadge" class="badge">—</span>
+        </div>
+      </section>
 
-      <!-- Métodos de acceso -->
-      <div class="section">
-        <h3>Sign-in methods</h3>
-        <div class="grid-2">
+      <!-- Columna derecha: Perfil & resumen -->
+      <section class="card">
+        <h3>Profile</h3>
+        <div class="row">
+          <div></div>
           <div>
-            <p class="muted">Google</p>
-            <button id="btnConnectGoogle" class="btn btn-outline">Connect Google</button>
-            <button id="btnDisconnectGoogle" class="btn btn-outline" style="display:none">Disconnect Google</button>
-          </div>
-          <div>
-            <p class="muted">Email & Password</p>
-            <button id="btnChangePassword" class="btn btn-outline" style="display:none">Change password</button>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+              <strong id="displayNameLabel">—</strong>
+            </div>
+            <label for="displayName">Display name</label>
+            <input id="displayName" type="text" placeholder="Your name" autocomplete="name">
+            <label for="email">Email</label>
+            <input id="email" type="text" readonly>
+            <div class="actions">
+              <button id="saveBtn" class="btn btn-primary">Save changes</button>
+              <button id="resetBtn" class="btn btn-outline" style="display:none">Reset password</button>
+            </div>
+            <div id="msg" class="muted" role="alert"></div>
           </div>
         </div>
-      </div>
 
-      <div class="divider"></div>
-
-      <!-- (Opcional) Resumen de carrito del user -->
-      <div class="section">
-        <h3>Quick summary</h3>
-        <p class="muted" id="cartSummary">Cart: 0 items</p>
-      </div>
+        <div style="margin-top:16px">
+          <h3>Quick summary</h3>
+          <p class="muted" id="cartSummary">Cart: 0 items</p>
+        </div>
+      </section>
     </div>
   </main>
 
   <!-- Firebase base -->
   <script type="module" src="js/firebase.js"></script>
 
-  <!-- Lógica de la página -->
+  <!-- Lógica de la página + Storage para avatar -->
   <script type="module">
     const $ = (s) => document.querySelector(s);
     const msg = $("#msg");
@@ -146,14 +157,15 @@
     };
 
     // SDK imports
-    import { onAuthStateChanged, GoogleAuthProvider, linkWithPopup } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
 
     // API expuesta por js/firebase.js
-    const { auth, getCart, saveProfile, logout, resetPassword, resendVerifyEmail, changePassword, isProviderLinked } = window.FB;
+    const { app, auth, db, getCart, saveProfile, logout, resetPassword, resendVerifyEmail } = window.FB;
+    const storage = getStorage(app);
 
     const ui = {
       avatar: $("#avatar"),
-      avatarSk: $("#avatarSk"),
       nameInput: $("#displayName"),
       nameLabel: $("#displayNameLabel"),
       email: $("#email"),
@@ -162,10 +174,31 @@
       verifyBanner: $("#verifyBanner"),
       resendLink: $("#resendLink"),
       cartSummary: $("#cartSummary"),
-      btnConnectGoogle: $("#btnConnectGoogle"),
-      btnDisconnectGoogle: $("#btnDisconnectGoogle"),
-      btnChangePassword: $("#btnChangePassword"),
+      bar: $("#bar"),
+      fileInput: $("#fileInput"),
+      btnUpload: $("#btnUpload"),
+      btnRemovePhoto: $("#btnRemovePhoto"),
+      userBtn: $("#userBtn"),
+      menuDropdown: $("#menuDropdown"),
+      menuLogout: $("#menuLogout"),
+      topAvatar: $("#topAvatar"),
+      topName: $("#topName"),
     };
+
+    // Dropdown simple
+    ui.userBtn?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const open = ui.menuDropdown.style.display === "block";
+      ui.menuDropdown.style.display = open ? "none" : "block";
+      ui.userBtn.setAttribute("aria-expanded", open ? "false" : "true");
+    });
+    document.addEventListener("click", () => {
+      ui.menuDropdown.style.display = "none";
+      ui.userBtn?.setAttribute("aria-expanded", "false");
+    });
+    ui.menuLogout?.addEventListener("click", async () => {
+      try { await logout(); } finally { location.href = "index.html"; }
+    });
 
     // Render inicial + redirección si no hay sesión
     onAuthStateChanged(auth, async (user) => {
@@ -178,29 +211,33 @@
         catch (e) { setMsg(e.message, 'error'); }
       };
 
-      // Avatar skeleton -> image
-      ui.avatar.src = user.photoURL || "img/avatar-default.png";
-      ui.avatar.hidden = false; ui.avatarSk.hidden = true;
-
       // Perfil básico
+      const photo = user.photoURL || "img/avatar-default.png";
+      ui.avatar.src = photo;
+      if (ui.topAvatar) ui.topAvatar.src = photo;
+
       ui.nameInput.value = user.displayName || "";
       ui.nameLabel.textContent = user.displayName || user.email || "Account";
+
       ui.email.value = user.email || "";
+      if (ui.topName) ui.topName.textContent = user.displayName || user.email || "Account";
 
       // Providers
       const providers = (user.providerData||[]).map(p => p.providerId);
       const hasGoogle = providers.includes('google.com');
       const hasPassword = providers.includes('password');
       ui.providerBadge.textContent = hasGoogle ? 'Google' : (hasPassword ? 'Email/Password' : (providers[0]||'Account'));
-
-      // Mostrar/ocultar botones por proveedor
       ui.resetBtn.style.display = hasPassword ? '' : 'none';
-      ui.btnChangePassword.style.display = hasPassword ? '' : 'none';
-      ui.btnConnectGoogle.style.display = hasGoogle ? 'none' : '';
-      ui.btnDisconnectGoogle.style.display = hasGoogle ? '' : 'none';
 
-      // Resumen de carrito (best-effort)
-      try { const items = await getCart(); ui.cartSummary.textContent = `Cart: ${items.length} item${items.length===1?"":"s"}`; } catch {}
+      // Resumen de carrito (tiempo real)
+      try {
+        const { onSnapshot, doc } = await import('https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js');
+        const refDoc = doc(db, 'carts', user.uid);
+        onSnapshot(refDoc, (snap) => {
+          const items = snap.exists() ? (snap.data().items || []) : [];
+          ui.cartSummary.textContent = `Cart: ${items.length} item${items.length===1?'':'s'}`;
+        });
+      } catch { /* ignore */ }
     });
 
     // Guardar cambios
@@ -210,48 +247,58 @@
       try {
         await saveProfile({ displayName });
         ui.nameLabel.textContent = displayName || ui.email.value;
+        if (ui.topName) ui.topName.textContent = displayName || ui.email.value;
         setMsg("Profile updated.", "success");
       } catch (e) { setMsg(e.message, "error"); }
     });
 
-    // Logout (top bar + card)
-    const doLogout = async () => { try { await logout(); } finally { location.href = "index.html"; } };
-    $("#logoutBtn").addEventListener("click", doLogout);
-    document.querySelector("[data-logout-link]").addEventListener("click", doLogout);
-
     // Reset password
     ui.resetBtn.addEventListener("click", async () => {
-      try { await resetPassword(ui.email.value); setMsg("We sent you a password reset email.", "success"); }
+      const email = ui.email.value;
+      try { await resetPassword(email); setMsg("We sent you a password reset email.", "success"); }
       catch (e) { setMsg(e.message, "error"); }
     });
 
-    // Change password (only if password provider)
-    ui.btnChangePassword.addEventListener('click', async () => {
-      const newPass = prompt('New password (min 6 chars):');
-      if (!newPass) return;
-      try { await changePassword(newPass); setMsg('Password changed.', 'success'); }
-      catch (e) { setMsg(e.message, 'error'); }
+    // ===== Avatar upload to Firebase Storage =====
+    function validateFile(file){
+      if(!file) return 'No file selected';
+      if(!/^image\//.test(file.type)) return 'Please choose an image.';
+      if(file.size > 2*1024*1024) return 'Image must be ≤ 2MB.';
+      return '';
+    }
+
+    ui.btnUpload.addEventListener('click', async () => {
+      const file = ui.fileInput.files?.[0];
+      const err = validateFile(file); if(err) return setMsg(err,'error');
+      const user = auth.currentUser; if(!user) return;
+      setMsg('Uploading photo…'); ui.bar.style.width = '0%';
+      const r = ref(storage, `avatars/${user.uid}.jpg`);
+      const task = uploadBytesResumable(r, file, { contentType: file.type });
+      task.on('state_changed', (snap) => {
+        const pct = Math.round((snap.bytesTransferred/snap.totalBytes)*100);
+        ui.bar.style.width = pct+'%';
+      }, (e) => {
+        setMsg(e.message,'error');
+      }, async () => {
+        const url = await getDownloadURL(r);
+        try {
+          await saveProfile({ photoURL: url });
+          ui.avatar.src = url;
+          if (ui.topAvatar) ui.topAvatar.src = url;
+          setMsg('Photo updated.','success');
+        } catch(e){ setMsg(e.message,'error'); }
+      });
     });
 
-    // Connect Google (link)
-    ui.btnConnectGoogle.addEventListener('click', async () => {
-      try {
-        const provider = new GoogleAuthProvider();
-        await linkWithPopup(window.FB.auth.currentUser, provider);
-        setMsg('Google linked to your account.', 'success');
-        location.reload();
-      } catch (e) { setMsg(e.message, 'error'); }
-    });
-
-    // Disconnect Google (requires another method present)
-    ui.btnDisconnectGoogle.addEventListener('click', async () => {
-      try {
-        const ok = await isProviderLinked('password');
-        if (!ok) { setMsg('Add a password first to disconnect Google.', 'error'); return; }
-        await window.FB.unlinkProvider('google.com');
-        setMsg('Google disconnected.', 'success');
-        location.reload();
-      } catch (e) { setMsg(e.message, 'error'); }
+    ui.btnRemovePhoto.addEventListener('click', async () => {
+      const user = auth.currentUser; if(!user) return;
+      try{
+        try { const r = ref(storage, `avatars/${user.uid}.jpg`); await deleteObject(r); } catch { /* ignore */ }
+        await saveProfile({ photoURL: '' });
+        ui.avatar.src = 'img/avatar-default.png';
+        if (ui.topAvatar) ui.topAvatar.src = 'img/avatar-default.png';
+        setMsg('Photo removed.','success');
+      } catch(e){ setMsg(e.message,'error'); }
     });
   </script>
 </body>

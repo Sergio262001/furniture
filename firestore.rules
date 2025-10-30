@@ -1,9 +1,11 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Permite lectura pública (temporal)
-    match /{document=**} {
-      allow read, write: if true;
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+    match /carts/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
     }
   }
 }

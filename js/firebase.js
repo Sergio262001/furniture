@@ -10,7 +10,9 @@ import {
   reauthenticateWithPopup, EmailAuthProvider, unlink, linkWithPopup
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 import {
-  getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp
+  getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp,
+  // [ADD] realtime
+  onSnapshot
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 // ✅ Config correcta (nota el storageBucket en appspot.com)
@@ -57,11 +59,23 @@ async function getCart() {
   const snap = await getDoc(ref);
   return snap.exists() ? (snap.data().items || []) : [];
 }
+
+// [ADD] Carrito en tiempo real (te devuelve un unsubscribe)
+function onCartSnapshot(cb) {
+  const u = auth.currentUser;
+  if (!u) { cb([]); return () => {}; }
+  const ref = doc(db, "carts", u.uid);
+  return onSnapshot(ref, (snap) => {
+    const data = snap.exists() ? (snap.data().items || []) : [];
+    cb(data);
+  });
+}
+
 async function saveProfile({ displayName, photoURL }) { // [MOD] admite photoURL opcional
   const u = auth.currentUser; if (!u) return;
   const update = {};
   if (displayName) update.displayName = displayName;
-  if (photoURL)    update.photoURL = photoURL;
+  if (photoURL !== undefined) update.photoURL = photoURL;
 
   if (Object.keys(update).length) await updateProfile(u, update);
 
@@ -86,44 +100,44 @@ async function saveProfile({ displayName, photoURL }) { // [MOD] admite photoURL
 }
 
 // ===== Helpers de seguridad y proveedores (para security.html & account.html) =====
-// [ADD] Registrar con email + verificación
+// Registrar con email + verificación
 async function signupWithEmail(email, pass) {
   const { user } = await createUserWithEmailAndPassword(auth, email, pass);
   try { await sendEmailVerification(user); } catch {}
   return user;
 }
 
-// [ADD] Alias equivalentes a tus nombres anteriores
+// Alias equivalentes a tus nombres anteriores
 const loginWithEmail  = (email, pass) => signInWithEmailAndPassword(auth, email, pass);
 const loginWithGoogle = () => signInWithPopup(auth, googleProvider);
 
-// [ADD] Enviar nuevo correo de verificación
+// Enviar nuevo correo de verificación
 const resendVerifyEmail = () => {
   if (!auth.currentUser) throw new Error("No hay sesión.");
   return sendEmailVerification(auth.currentUser);
 };
 
-// [ADD] Cambiar contraseña (requiere sesión reciente)
+// Cambiar contraseña (requiere sesión reciente)
 const changePassword = (newPassword) => updatePassword(auth.currentUser, newPassword);
 
-// [ADD] ¿tiene vinculado un proveedor?
+// ¿tiene vinculado un proveedor?
 const isProviderLinked = (providerId) =>
   !!auth.currentUser?.providerData.find(p => p.providerId === providerId);
 
-// [ADD] Vincular Google a la cuenta actual (NO iniciar sesión con otra)
+// Vincular Google a la cuenta actual (NO iniciar sesión con otra)
 const linkGoogle = () => linkWithPopup(auth.currentUser, googleProvider);
 
-// [ADD] Desvincular proveedor (ej: 'google.com')
+// Desvincular proveedor (ej: 'google.com')
 const unlinkProvider = (providerId) => unlink(auth.currentUser, providerId);
 
-// [ADD] Reautenticación (acciones sensibles)
+// Reautenticación (acciones sensibles)
 const reauthWithPassword = (email, password) => {
   const cred = EmailAuthProvider.credential(email, password);
   return reauthenticateWithCredential(auth.currentUser, cred);
 };
 const reauthWithGoogle = () => reauthenticateWithPopup(auth.currentUser, googleProvider);
 
-// [ADD] Wrapper para exigir sesión reciente
+// Wrapper para exigir sesión reciente
 async function requireRecentLogin(fn) {
   try { return await fn(); }
   catch (e) {
@@ -145,6 +159,8 @@ window.FB = {
   saveProfile,
   // Cart
   ensureCartRef, addToCart, getCart,
+  // [ADD] Realtime cart
+  onCartSnapshot,
   // [ADD] Nuevos helpers usados por account/security
   loginWithEmail, signupWithEmail, loginWithGoogle,
   resendVerifyEmail, changePassword, isProviderLinked,
