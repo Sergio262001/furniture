@@ -1,0 +1,129 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Security | Furniture</title>
+  <script>
+    (function () {
+      var REPO_SLUG = 'furniture';
+      var isGH = /github\.io$/i.test(location.hostname);
+      var base = document.createElement('base');
+      base.href = isGH ? '/' + REPO_SLUG + '/' : '/';
+      document.head.prepend(base);
+      if (isGH && !location.pathname.startsWith('/' + REPO_SLUG + '/')) {
+        location.replace('/' + REPO_SLUG + location.pathname + location.search + location.hash);
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .container{max-width:900px;margin:24px auto;padding:0 16px}
+    .card{background:#fff;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:24px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .muted{color:#6b7280}
+    .btn{border:1px solid #e5e7eb;border-radius:10px;padding:10px 12px;background:#fff;cursor:pointer}
+    .btn-primary{background:#dc2626;color:#fff;border:0}
+    .badge{display:inline-block;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:999px;padding:4px 10px;font-size:.85rem}
+    .table{width:100%;border-collapse:collapse}
+    .table th,.table td{border-bottom:1px solid #e5e7eb;padding:10px;text-align:left}
+    .ok{color:#065f46}
+    .err{color:#b91c1c}
+  </style>
+</head>
+<body>
+  <main class="container">
+    <div class="card">
+      <h1>Security</h1>
+      <p class="muted">Manage sign‑in methods, recent login, and sensitive actions.</p>
+
+      <section>
+        <h3>Account status</h3>
+        <p>Email: <strong id="accEmail">—</strong> <span id="verBadge" class="badge">—</span></p>
+        <p>Last sign‑in: <span id="lastLogin">—</span></p>
+      </section>
+
+      <section class="row">
+        <div>
+          <h3>Sign‑in methods</h3>
+          <p class="muted">Link or unlink providers.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button id="linkGoogle" class="btn">Link Google</button>
+            <button id="unlinkGoogle" class="btn">Unlink Google</button>
+            <button id="changePass" class="btn">Change password</button>
+          </div>
+        </div>
+        <div>
+          <h3>Sensitive actions</h3>
+          <p class="muted">Requires recent login (reauth).</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button id="btnReauthPass" class="btn">Reauth with password</button>
+            <button id="btnReauthGoogle" class="btn">Reauth with Google</button>
+          </div>
+          <p id="reauthMsg" class="muted"></p>
+        </div>
+      </section>
+
+      <section>
+        <h3>Active session</h3>
+        <table class="table">
+          <tbody>
+            <tr><th>UID</th><td id="sessUid">—</td></tr>
+            <tr><th>Provider(s)</th><td id="sessProv">—</td></tr>
+            <tr><th>Email verified</th><td id="sessVer">—</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button id="logout" class="btn">Sign out</button>
+          <a href="account.html" class="btn">Back to account</a>
+        </div>
+      </section>
+
+      <p id="msg" class="muted"></p>
+    </div>
+  </main>
+
+  <script type="module" src="js/firebase.js"></script>
+  <script type="module">
+    const $ = s=>document.querySelector(s); const setMsg=(t,c='')=>{ const m=$('#msg'); m.textContent=t||''; m.className=c||'muted'; };
+    const setReauth=(t,c='')=>{ const m=$('#reauthMsg'); m.textContent=t||''; m.className=c||'muted'; };
+
+    const { auth, linkGoogle, unlinkProvider, changePassword, requireRecentLogin } = window.FB;
+
+    window.addEventListener('DOMContentLoaded', ()=>{
+      const u = auth.currentUser; if(!u){ location.href='login-tabs.html'; return; }
+      $('#accEmail').textContent = u.email||'—';
+      $('#verBadge').textContent = u.emailVerified ? 'Verified' : 'Not verified';
+      $('#sessUid').textContent = u.uid;
+      $('#sessProv').textContent = (u.providerData||[]).map(p=>p.providerId).join(', ')||'—';
+      $('#sessVer').textContent = u.emailVerified ? 'Yes' : 'No';
+      $('#lastLogin').textContent = u.metadata?.lastSignInTime || '—';
+    });
+
+    $('#linkGoogle').addEventListener('click', async()=>{
+      try { await linkGoogle(); setMsg('Google linked.','ok'); location.reload(); }
+      catch(e){ setMsg(e.message,'err'); }
+    });
+    $('#unlinkGoogle').addEventListener('click', async()=>{
+      try { await unlinkProvider('google.com'); setMsg('Google unlinked.','ok'); location.reload(); }
+      catch(e){ setMsg(e.message,'err'); }
+    });
+    $('#changePass').addEventListener('click', async()=>{
+      const np = prompt('New password (min 6 chars):'); if(!np) return;
+      try { await requireRecentLogin(async()=>await changePassword(np)); setMsg('Password changed.','ok'); }
+      catch(e){ setMsg(e.message,'err'); }
+    });
+
+    $('#btnReauthPass').addEventListener('click', async()=>{
+      const email = window.FB.auth.currentUser?.email; const pw = prompt('Enter your current password for '+email+':');
+      try { await window.FB.reauthWithPassword(email, pw); setReauth('Reauthenticated with password.','ok'); }
+      catch(e){ setReauth(e.message,'err'); }
+    });
+    $('#btnReauthGoogle').addEventListener('click', async()=>{
+      try { await window.FB.reauthWithGoogle(); setReauth('Reauthenticated with Google.','ok'); }
+      catch(e){ setReauth(e.message,'err'); }
+    });
+
+    $('#logout').addEventListener('click', async()=>{ await window.FB.logout(); location.href='index.html'; });
+  </script>
+</body>
+</html>

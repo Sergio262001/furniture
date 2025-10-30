@@ -1,13 +1,23 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login / Create Account - Ashley Clone</title>
-
+  <title>Login / Create Account - Furniture</title>
+  <script>
+    (function () {
+      var REPO_SLUG = 'furniture';
+      var isGH = /github\.io$/i.test(location.hostname);
+      var base = document.createElement('base');
+      base.href = isGH ? '/' + REPO_SLUG + '/' : '/';
+      document.head.prepend(base);
+      if (isGH && !location.pathname.startsWith('/' + REPO_SLUG + '/')) {
+        location.replace('/' + REPO_SLUG + location.pathname + location.search + location.hash);
+      }
+    })();
+  </script>
   <link rel="stylesheet" href="style.css"/>
   <script type="module" src="js/firebase.js"></script>
-
   <style>
     .auth-header { display:flex; justify-content:center; padding:16px 0; }
     .auth-header img { height:48px; }
@@ -18,7 +28,7 @@
     .auth-tab.active { background:#fff; border-color:#aaa; font-weight:600; }
     .auth-form label { display:block; margin:10px 0 6px; font-weight:600; }
     .auth-form input { width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; }
-    .auth-btn { width:100%; margin-top:14px; padding:12px; border:0; border-radius:10px; cursor:pointer; }
+    .auth-btn { width:100%; margin-top:14px; padding:12px; border:0; border-radius:10px; cursor:pointer; background:#dc2626; color:#fff; }
     .auth-note { margin-top:10px; font-size:.9rem; opacity:.8; }
     .hidden { display:none; }
     .status { margin-top:10px; font-size:.95rem; }
@@ -31,54 +41,41 @@
   </style>
 </head>
 <body>
-
-  <!-- Header simple -->
   <div class="auth-header">
-    <a href="index.html" class="auth-logo"><img src="logo.jfif" alt="Ashley Logo"/></a>
+    <a href="index.html" class="auth-logo"><img src="logo.jfif" alt="Furniture Logo"/></a>
   </div>
 
   <div class="auth-container">
     <div class="auth-box">
-
-      <!-- Tabs -->
       <div class="auth-tabs">
         <button class="auth-tab active" id="login-tab" type="button">Log In</button>
         <button class="auth-tab" id="create-tab" type="button">Create Account</button>
       </div>
 
-      <!-- Form Login -->
+      <!-- Login -->
       <form id="login-form" class="auth-form" novalidate>
         <h2>Welcome Back</h2>
-
         <label for="login-email">Email</label>
         <input id="login-email" type="email" placeholder="Enter your email" autocomplete="email" required/>
-
         <label for="login-pass">Password</label>
         <input id="login-pass" type="password" placeholder="Enter your password" autocomplete="current-password" required/>
-
         <button id="btnLogin" type="submit" class="auth-btn">Log In</button>
         <div id="login-status" class="status"></div>
-
         <div class="oauth-row">
           <button id="btnGoogle" type="button">Continue with Google</button>
         </div>
-
         <p class="auth-note"><a href="#" id="link-forgot">Forgot your password?</a></p>
       </form>
 
-      <!-- Form Create -->
+      <!-- Create -->
       <form id="create-form" class="auth-form hidden" novalidate>
         <h2>Create Account</h2>
-
         <label for="create-name">Full Name</label>
         <input id="create-name" type="text" placeholder="Your full name" autocomplete="name" required/>
-
         <label for="create-email">Email</label>
         <input id="create-email" type="email" placeholder="Enter your email" autocomplete="email" required/>
-
         <label for="create-pass">Password</label>
         <input id="create-pass" type="password" placeholder="Create a password" autocomplete="new-password" required/>
-
         <button id="btnRegister" type="submit" class="auth-btn">Sign Up</button>
         <div id="create-status" class="status"></div>
       </form>
@@ -87,14 +84,12 @@
     </div>
   </div>
 
-  <!-- Tabs + Auth handlers -->
   <script type="module">
     // Tabs
     const loginTab   = document.getElementById("login-tab");
     const createTab  = document.getElementById("create-tab");
     const loginForm  = document.getElementById("login-form");
     const createForm = document.getElementById("create-form");
-
     const setTab = (mode) => {
       const isLogin = mode === "login";
       loginTab.classList.toggle("active", isLogin);
@@ -105,65 +100,42 @@
     loginTab.addEventListener("click",  () => setTab("login"));
     createTab.addEventListener("click", () => setTab("create"));
 
-    // Helpers UI
+    // Helpers
     const setLoading = (form, on) => form.classList.toggle("loading", !!on);
-    const showMsg = (el, msg, ok=false) => {
-      el.textContent = msg || "";
-      el.className = "status " + (ok ? "ok" : "err");
-    };
+    const showMsg = (el, msg, ok=false) => { el.textContent = msg || ""; el.className = "status " + (ok ? "ok" : "err"); };
 
-    // ======== LOGIN ========
+    // ===== LOGIN
     const loginStatus = document.getElementById("login-status");
     document.getElementById("btnLogin").addEventListener("click", async (e) => {
       e.preventDefault();
       const email = (document.getElementById("login-email").value || "").trim();
       const pass  = (document.getElementById("login-pass").value  || "").trim();
       if (!email || !pass) return showMsg(loginStatus, "Enter email and password");
-
       setLoading(loginForm, true);
       try {
-        await FB.loginEmail(email, pass);
+        await window.FB.loginWithEmail(email, pass);
         showMsg(loginStatus, "Logged in ✅", true);
-        location.href = "index.html";
+        location.href = "account.html";
       } catch (err) {
         showMsg(loginStatus, err.message || "Login failed");
-      } finally {
-        setLoading(loginForm, false);
-      }
+      } finally { setLoading(loginForm, false); }
     });
-
-    // Google
     document.getElementById("btnGoogle").addEventListener("click", async () => {
       setLoading(loginForm, true);
-      try {
-        await FB.loginGoogle();
-        location.href = "index.html";
-      } catch (err) {
-        showMsg(loginStatus, err.message || "Google sign-in failed");
-      } finally {
-        setLoading(loginForm, false);
-      }
+      try { await window.FB.loginWithGoogle(); location.href = "account.html"; }
+      catch (err) { showMsg(loginStatus, err.message || "Google sign-in failed"); }
+      finally { setLoading(loginForm, false); }
     });
-
-    // Forgot password (reset por email)
     document.getElementById("link-forgot").addEventListener("click", async (e) => {
       e.preventDefault();
-      const emailInput = document.getElementById("login-email");
-      const email = (emailInput?.value || "").trim();
-      if (!email) { emailInput?.focus(); return showMsg(loginStatus, "Enter your email first."); }
-
-      try {
-        setLoading(loginForm, true);
-        await FB.resetPassword(email);
-        showMsg(loginStatus, "We sent a reset link to your email ✅", true);
-      } catch (err) {
-        showMsg(loginStatus, err.message || "Could not send reset email");
-      } finally {
-        setLoading(loginForm, false);
-      }
+      const email = (document.getElementById("login-email")?.value || "").trim();
+      if (!email) return showMsg(loginStatus, "Enter your email first.");
+      try { setLoading(loginForm, true); await window.FB.resetPassword(email); showMsg(loginStatus, "We sent a reset link ✅", true); }
+      catch (err) { showMsg(loginStatus, err.message || "Could not send reset email"); }
+      finally { setLoading(loginForm, false); }
     });
 
-    // ======== REGISTER ========
+    // ===== REGISTER
     const createStatus = document.getElementById("create-status");
     document.getElementById("btnRegister").addEventListener("click", async (e) => {
       e.preventDefault();
@@ -171,25 +143,16 @@
       const email = (document.getElementById("create-email").value || "").trim();
       const pass  = (document.getElementById("create-pass").value  || "").trim();
       if (!name || !email || !pass) return showMsg(createStatus, "Fill all fields");
-
       setLoading(createForm, true);
       try {
-        await FB.registerEmail(email, pass);
-        await FB.saveProfile({ displayName: name }); // guarda nombre
-        showMsg(createStatus, "Account created ✅", true);
-        location.href = "index.html";
+        await window.FB.signupWithEmail(email, pass);
+        await window.FB.saveProfile({ displayName: name });
+        showMsg(createStatus, "Account created ✅ Check your inbox to verify.", true);
+        location.href = "account.html";
       } catch (err) {
         showMsg(createStatus, err.message || "Sign up failed");
-      } finally {
-        setLoading(createForm, false);
-      }
+      } finally { setLoading(createForm, false); }
     });
   </script>
-
-
-  <!-- ... contenido de la página ... -->
-
-  <!-- Firebase base -->
-  <script type="module" src="js/firebase.js"></script>
 </body>
 </html>
