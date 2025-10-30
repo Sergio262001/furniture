@@ -33,6 +33,18 @@ async function loadCategoryData() {
   if (!cat) {
     container?.insertAdjacentHTML('beforeend', `<p style="color:red">⚠ Falta data-cat en &lt;body&gt;</p>`);
     return;
+
+    // Delegated click inside panel to catch any Apply-like button
+    function __applyDelegated(e){
+      const t = e.target;
+      const hit = t.closest && t.closest('#applyFilters, .apply-filters, [data-apply-filters], button, input[type="submit"]');
+      if (hit) {
+        const sig = ((hit.id||'') + ' ' + (hit.className||'') + ' ' + (hit.name||'') + ' ' + (hit.value||'') + ' ' + (hit.title||'')).toLowerCase();
+        if (/(^|[\s_-])apply([\s_-]|$)/.test(sig)) setTimeout(closeFilters, 0);
+      }
+    }
+    panel.addEventListener('click', __applyDelegated);
+    
   }
 
   try {

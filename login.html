@@ -39,7 +39,14 @@
     .loading { opacity:.7; pointer-events:none; }
   </style>
 </head>
-<body>
+<body><!-- Reutilizable: Header global Furniture -->
+  <div id="site-header"></div>
+  
+  <!-- Asegúrate de cargar firebase.js ANTES del header -->
+  <script type="module" src="js/firebase.js"></script>
+  <script type="module" src="js/site-header.js"></script>
+
+  
   <div class="auth-header">
     <a href="index.html" class="auth-logo"><img src="logo.jfif" alt="Furniture Logo"/></a>
   </div>
@@ -114,14 +121,14 @@
       try {
         await window.FB.loginWithEmail(email, pass);
         showMsg(loginStatus, "Logged in ✅", true);
-        location.href = "account.html";
+        location.href = "index.html";
       } catch (err) {
         showMsg(loginStatus, err.message || "Login failed");
       } finally { setLoading(loginForm, false); }
     });
     document.getElementById("btnGoogle").addEventListener("click", async () => {
       setLoading(loginForm, true);
-      try { await window.FB.loginWithGoogle(); location.href = "account.html"; }
+      try { await window.FB.loginWithGoogle(); location.href = "index.html"; }
       catch (err) { showMsg(loginStatus, err.message || "Google sign-in failed"); }
       finally { setLoading(loginForm, false); }
     });
@@ -147,7 +154,7 @@
         await window.FB.signupWithEmail(email, pass);
         await window.FB.saveProfile({ displayName: name });
         showMsg(createStatus, "Account created ✅ Check your inbox to verify.", true);
-        location.href = "account.html";
+        location.href = "index.html";
       } catch (err) {
         showMsg(createStatus, err.message || "Sign up failed");
       } finally { setLoading(createForm, false); }

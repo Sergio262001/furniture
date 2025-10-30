@@ -1122,3 +1122,51 @@ a:hover { color:#e60023; }
 
 
 
+
+/* === Filters desktop title in red with underline === */
+@media (min-width: 769px) {
+  .filters > h3 {
+    display: block !important;
+    color: #e60023;
+    margin: 12px 0 8px 0;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #e60023;
+    font-weight: 700;
+  }
+}
+
+/* === Consistent desktop 'Filters' title === */
+@media (min-width: 769px) {
+  .filters > h3, #filters > h3 {
+    display: block !important;
+    color: #e60023;
+    margin: 12px 0 8px 0;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #e60023;
+    font-weight: 700;
+  }
+}
+
+/* HIDE_X_DESKTOP */
+@media (min-width: 769px) {
+  .filters .filters-close-btn,
+  #filters .filters-close-btn {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
+
+/* HIDE X DESKTOP */
+@media (min-width: 769px) {
+  .filters .filters-close-btn,
+  #filters .filters-close-btn {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
+
+/* TIGHTEN FILTERS TOP */
+@media (min-width: 769px) {
+  .filters-header { margin-bottom: 0 !important; border-bottom: none !important; }
+  .filters > h3, #filters > h3 { margin-top: 0 !important; }
+}

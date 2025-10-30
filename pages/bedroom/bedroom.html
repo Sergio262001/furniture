@@ -11,6 +11,13 @@
 </head>
 <body>
 
+  <!-- Reutilizable: Header global Furniture -->
+<div id="site-header"></div>
+
+<!-- Asegúrate de cargar firebase.js ANTES del header -->
+<script type="module" src="../../js/firebase.js"></script>
+<script type="module" src="../../js/site-header.js"></script>
+
   <!-- 🔹 TOP BAR -->
   <div class="top-bar">
     <div>📍 Furniture store in Fairfield, OH | 🚚 Delivering to <strong>0000</strong></div>
@@ -53,9 +60,10 @@
 
     <aside id="filters" class="filters">
       <div class="filters-header">
-        <strong>Filters</strong>
         <button class="filters-close-btn" type="button" aria-label="Close">✕</button>
       </div>
+
+      <h3>Filters</h3>
 
       <label for="minPriceFilter">Min Price:</label>
       <input type="number" id="minPriceFilter" placeholder="e.g. 100" />
@@ -250,11 +258,11 @@
    <!-- ... contenido de la página ... -->
 
   <!-- Firebase base -->
-  <script type="module" src="js/firebase.js"></script>
+  <script type="module" src="../../js/firebase.js"></script>
   <!-- ... resto de tu contenido -->
 
   <!-- Firebase base -->
-  <script type="module" src="js/firebase.js"></script>
+  <script type="module" src="../../js/firebase.js"></script>
 
   <!-- Script del menú desplegable de usuario -->
   <script type="module">
@@ -325,5 +333,71 @@
       }
     });
   </script>
+  <script src="../../js/filters-wire.js"></script>
+
+
+<!-- UX filtros: overlay, ESC, cerrar al aplicar (paridad con Outdoor) -->
+<script>
+(function () {
+  var panel = document.getElementById('filters');
+  if (!panel || panel.__wired) return; // evita doble cableado si ya existe
+  panel.__wired = true;
+
+  // 1) Overlay hermano inmediato de #filters
+  var overlay = panel.nextElementSibling;
+  if (!(overlay && overlay.classList.contains('filters-overlay'))) {
+    document.querySelectorAll('.filters-overlay').forEach(function(el){ if (el !== overlay) el.remove(); });
+    overlay = document.createElement('div');
+    overlay.className = 'filters-overlay';
+    panel.parentNode.insertBefore(overlay, panel.nextElementSibling);
+  }
+
+  // 2) Asegura header con botón ✕ si falta
+  if (!panel.querySelector('.filters-header')) {
+    var header = document.createElement('div');
+    header.className = 'filters-header';
+    header.innerHTML = '<strong>Filters</strong><button class="filters-close-btn" type="button" aria-label="Close">✕</button>';
+    panel.insertBefore(header, panel.firstChild);
+  }
+  var closeBtn = panel.querySelector('.filters-close-btn');
+
+  // 3) Sincroniza estado visual + bloqueo de scroll
+  function sync() {
+    var open = panel.classList.contains('open');
+    document.body.classList.toggle('body-no-scroll', open);
+    overlay.style.display = open ? 'block' : 'none';
+    if (open && window.matchMedia('(max-width:768px)').matches) panel.style.left = '0';
+    if (!open && panel.style.left === '0px') panel.style.left = '';
+  }
+
+  // 4) Reemplaza/decora toggleFilters para mantener compatibilidad
+  var originalToggle = window.toggleFilters;
+  window.toggleFilters = function () {
+    if (typeof originalToggle === 'function') originalToggle();
+    else panel.classList.toggle('open');
+    sync();
+  };
+
+  // 5) Cerrar por ✕, overlay y tecla ESC
+  if (closeBtn) closeBtn.addEventListener('click', function(){ panel.classList.remove('open'); sync(); });
+  overlay.addEventListener('click', function(){ panel.classList.remove('open'); sync(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && panel.classList.contains('open')) { panel.classList.remove('open'); sync(); }
+  });
+
+  // 6) Cerrar al aplicar (sin romper onclick existente)
+  var applyBtn = panel.querySelector("button[onclick*='applyFilters']");
+  if (applyBtn && !applyBtn.__closeWired) {
+    applyBtn.addEventListener('click', function(){ setTimeout(function(){ panel.classList.remove('open'); sync(); }, 0); });
+    applyBtn.__closeWired = true;
+  }
+
+  // 7) Expón applyFilters si no está global
+  if (typeof window.applyFilters !== 'function' && typeof applyFilters === 'function') {
+    window.applyFilters = applyFilters;
+  }
+})();
+</script>
+
 </body>
 </html>

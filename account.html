@@ -48,7 +48,7 @@
     .uploader{display:grid;gap:8px}
     .progress{height:8px;background:#f3f4f6;border-radius:999px;overflow:hidden}
     .progress>span{display:block;height:100%;background:#dc2626;width:0%}
-    /* dropdown */
+    /* Dropdown */
     .menu{position:relative}
     .menu-btn{display:flex;align-items:center;gap:8px}
     .menu-panel{display:none;position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--ring);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.08);min-width:180px;z-index:50}
@@ -57,6 +57,16 @@
   </style>
 </head>
 <body>
+
+
+  <!-- Reutilizable: Header global Furniture -->
+<div id="site-header"></div>
+
+<!-- Asegúrate de cargar firebase.js ANTES del header -->
+<script type="module" src="js/firebase.js"></script>
+<script type="module" src="js/site-header.js"></script>
+
+
   <header class="container" aria-label="Top navigation">
     <div class="hero">
       <div>
