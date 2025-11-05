@@ -12,6 +12,9 @@
 
 <body>
 
+<!-- [ADD] Fuerza ocultar el menú legacy del top-bar sin borrar código -->
+<script>window.FORCE_HIDE_LEGACY_MENU = true;</script>
+
 <!-- Reutilizable: Header global Furniture -->
 <div id="site-header"></div>
 
@@ -27,7 +30,7 @@
     <!-- Login / Logout (Firebase controla visibilidad) -->
     <a href="login.html" data-login-link>Login</a>
 
-    <!-- Menú de usuario -->
+    <!-- Menú de usuario (LEGACY, se dejará oculto) -->
     <div id="user-menu-container" style="position:relative;display:none" data-auth="in">
       <button id="user-menu-button" class="user-btn" style="background:none;border:0;color:#fff;cursor:pointer;font-weight:500;display:flex;align-items:center;gap:6px">
         <img id="user-avatar" src="img/avatar-default.png" alt="User" style="width:22px;height:22px;border-radius:50%;object-fit:cover;">
@@ -143,7 +146,7 @@
   <!-- Firebase base -->
   <script type="module" src="js/firebase.js"></script>
 
-  <!-- Script del menú desplegable de usuario -->
+  <!-- Script del menú desplegable de usuario (LEGACY, ahora forzado a oculto) -->
   <script type="module">
     import { onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
     const { auth } = window.FB;
@@ -192,6 +195,12 @@
         if (loginLink) loginLink.style.display = '';
         menuWrap.style.display = 'none';
         dropdown.style.display = 'none';
+      }
+
+      /* [ADD] Guardia: mantener el menú legacy siempre oculto */
+      if (window.FORCE_HIDE_LEGACY_MENU && menuWrap) {
+        menuWrap.style.display = 'none';
+        if (dropdown) dropdown.style.display = 'none';
       }
     });
 

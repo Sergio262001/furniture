@@ -1,17 +1,21 @@
-// js/product.js — detalle de producto robusto (ajustado a tu estructura)
+// js/product.js — detalle de producto robusto y sincronizado
 import { getParam } from './paths.js';
 import { loadJSONWithCandidates } from './load-json.js';
 
 (function () {
-  // Contador carrito (igual que usas en otras páginas)
+  // === Contador global del carrito ===
   function getCartCountFromStorage() {
-    try { return (JSON.parse(localStorage.getItem("cart")) || []).reduce((s,i)=>s+(i.quantity||0),0); }
-    catch { return 0; }
+    try {
+      return (JSON.parse(localStorage.getItem("cart")) || [])
+        .reduce((s, i) => s + (Number(i.quantity ?? i.cantidad ?? 0)), 0);
+    } catch { return 0; }
   }
+
   function updateCartCount() {
     const el = document.getElementById("cart-count");
     if (el) el.textContent = getCartCountFromStorage();
   }
+
   addEventListener("load", updateCartCount);
   addEventListener("storage", (e) => { if (e.key === "cart") updateCartCount(); });
 })();
@@ -19,7 +23,7 @@ import { loadJSONWithCandidates } from './load-json.js';
 (async function () {
   const id = getParam('id');
   const cat = (getParam('cat') || '').toLowerCase();
-  const jsonParam = getParam('json'); // p.ej. pages/bedroom/bedroom.json
+  const jsonParam = getParam('json'); // Ej: pages/bedroom/bedroom.json
 
   const root = document.getElementById('product-detail');
   const loading = document.getElementById('pd-loading');
@@ -29,7 +33,7 @@ import { loadJSONWithCandidates } from './load-json.js';
     return;
   }
 
-  // Candidatos de JSON (primero si viene por query)
+  // Posibles JSON a cargar
   const candidates = [
     jsonParam,
     cat ? `pages/${cat}/${cat}.json` : null,
@@ -47,12 +51,12 @@ import { loadJSONWithCandidates } from './load-json.js';
       return;
     }
 
-    // Imagen principal: soporte image | img | images[0]
+    // Imagen principal
     const firstImage =
       (Array.isArray(product.images) && product.images[0]) ||
       product.image || product.img || '';
 
-    const backHref = cat ? `pages/${cat}/${cat}.html` : 'index.html'; // [MOD] vuelves a pages/<cat>/<cat>.html
+    const backHref = cat ? `pages/${cat}/${cat}.html` : 'index.html';
 
     root.innerHTML = `
       <section class="product">
@@ -78,7 +82,6 @@ import { loadJSONWithCandidates } from './load-json.js';
       </section>
     `;
 
-    // === Carrito (Firebase si está disponible; si no, localStorage)
     const addBtn = document.getElementById('add-to-cart');
     const buyBtn = document.getElementById('buy-now');
 
@@ -87,6 +90,7 @@ import { loadJSONWithCandidates } from './load-json.js';
       return Number.isFinite(v) && v > 0 ? v : 1;
     }
 
+    // === Función unificada: agrega según el tipo de sesión ===
     async function addToCartUnified(prod, quantity) {
       const item = {
         id: prod.id,
@@ -96,22 +100,30 @@ import { loadJSONWithCandidates } from './load-json.js';
         quantity
       };
 
-      const useFirebase = window.FB && FB.auth && FB.auth.currentUser && typeof FB.addToCart === 'function';
-      if (useFirebase) {
-        await FB.addToCart(item);
+      // 🔹 Si hay usuario logueado y existe FB.addToCart, usa Firestore
+      const loggedUser = window.FB?.auth?.currentUser;
+      const canUseFirebase = loggedUser && typeof window.FB?.addToCart === 'function';
+
+      if (canUseFirebase) {
+        try {
+          await FB.addToCart(item);
+          console.log("🟢 Agregado a Firestore:", item);
+        } catch (err) {
+          console.warn("Error al agregar en Firestore:", err);
+          alert("Error agregando al carrito remoto: " + (err.message || err));
+        }
       } else {
+        // 🔸 Invitado: usa localStorage
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');
         const idx = cart.findIndex(p => String(p.id) === String(item.id));
         if (idx !== -1) cart[idx].quantity = Number(cart[idx].quantity || 0) + item.quantity;
         else cart.push(item);
         localStorage.setItem('cart', JSON.stringify(cart));
+        console.log("🟠 Agregado a carrito local:", item);
       }
-      // refresca contador simple
-      const el = document.getElementById('cart-count');
-      if (el) {
-        const cartNow = JSON.parse(localStorage.getItem('cart') || '[]');
-        el.textContent = cartNow.reduce((s,i)=>s+(i.quantity||0),0);
-      }
+
+      // 🔹 Actualiza el contador global del header
+      if (window.updateCartCount) window.updateCartCount();
     }
 
     addBtn?.addEventListener('click', async () => {

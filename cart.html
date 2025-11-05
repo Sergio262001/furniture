@@ -13,18 +13,18 @@
 <body>
 
   <!-- Reutilizable: Header global Furniture -->
-<div id="site-header"></div>
+  <div id="site-header"></div>
 
-<!-- Asegúrate de cargar firebase.js ANTES del header -->
-<script type="module" src="js/firebase.js"></script>
-<script type="module" src="js/site-header.js"></script>
+  <!-- Asegúrate de cargar firebase.js ANTES del header -->
+  <script type="module" src="js/firebase.js"></script>
+  <script type="module" src="js/site-header.js"></script>
 
   <!-- 🔹 TOP BAR (login/logout dinámico) -->
   <div class="top-bar">
     <div>📍 Furniture store in Fairfield, OH | 🚚 Delivering to <strong>0000</strong></div>
     <div>
       <a href="login.html" data-login-link>Login</a>
-      <a href="#" data-logout-link style="display:none" onclick="FB.logout()">Logout</a>
+      <a href="#" data-logout-link style="display:none">Logout</a>
       <a href="#" id="financing-btn">Financing</a>
       <a href="#" id="help-btn">Help</a>
       <a href="cart.html">🛒 (<span id="cart-count">0</span>)</a>
@@ -42,7 +42,7 @@
     </div>
   </div>
 
-  <!-- 🔹 CONTENEDOR DEL CARRITO -->
+  <!-- 🔹 CONTENEDOR DEL CARRITO (BLOQUE 1) -->
   <div class="cart-container">
     <div id="cart-items" class="cart-items"></div>
 
@@ -57,14 +57,11 @@
   </div>
 
   <!-- =========================
-       Lógica de carrito (localStorage)
+       Lógica de carrito (localStorage) - BLOQUE 1
        ========================= -->
   <script>
   (function () {
-    // lee carrito desde localStorage
     const raw = JSON.parse(localStorage.getItem('cart')) || [];
-
-    // normaliza cada producto
     function normalize(rawItem, idx) {
       return {
         id: rawItem.id ?? idx,
@@ -74,17 +71,11 @@
         cantidad: Number(rawItem.cantidad ?? rawItem.quantity ?? 1)
       };
     }
-
     let cart = raw.map(normalize);
 
     function saveCart() {
       localStorage.setItem("cart", JSON.stringify(cart));
-      // actualiza contador global si existe
-      try {
-        const count = cart.reduce((s, it) => s + (it.cantidad || 0), 0);
-        const badge = document.getElementById("cart-count");
-        if (badge) badge.textContent = count;
-      } catch(_) {}
+      try { if (window.updateCartCount) window.updateCartCount(); } catch(_) {}
     }
 
     function renderCart() {
@@ -116,31 +107,23 @@
           </div>
         `);
       });
-
       document.getElementById("total").textContent = "Total: $" + total.toFixed(2);
     }
 
-    // Exponer helpers para botones inline
     window.changeQty = function (i, delta) {
       cart[i].cantidad += delta;
       if (cart[i].cantidad <= 0) cart.splice(i, 1);
-      saveCart();
-      renderCart();
+      saveCart(); renderCart();
     };
-
     window.removeFromCart = function (i) {
       cart.splice(i, 1);
-      saveCart();
-      renderCart();
+      saveCart(); renderCart();
     };
-
     window.clearCart = function () {
       cart = [];
-      saveCart();
-      renderCart();
+      saveCart(); renderCart();
     };
 
-    // inicializa vista
     saveCart();
     renderCart();
   })();
@@ -150,25 +133,17 @@
        Checkout con Stripe (opcional)
        ========================= -->
   <script type="module">
-    // Solo si tendrás la Cloud Function mapeada:
-    //  firebase.json (hosting.rewrites): { "source": "/createCheckoutSession", "function": "createCheckoutSession" }
     const btn = document.getElementById("btnCheckout");
     btn?.addEventListener("click", async () => {
-      // lee items actuales del localStorage (mismo formato que render)
       const items = (JSON.parse(localStorage.getItem("cart")) || []).map(it => ({
         id: it.id,
         name: it.nombre || it.name || "Product",
         price: Number(it.precio ?? it.price ?? 0),
         quantity: Number(it.cantidad ?? it.quantity ?? 1)
       }));
-
-      if (!items.length) {
-        alert("Tu carrito está vacío.");
-        return;
-      }
+      if (!items.length) { alert("Tu carrito está vacío."); return; }
 
       try {
-        // pide sesión a la Function
         const res = await fetch("/createCheckoutSession", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -177,7 +152,6 @@
         const data = await res.json();
         if (!data.sessionId) throw new Error(data.error || "No se pudo crear la sesión");
 
-        // carga Stripe.js si hace falta
         if (!window.Stripe) {
           await new Promise(r => {
             const s = document.createElement("script");
@@ -198,12 +172,141 @@
   <script src="js/modals.js" defer></script>
   <script src="js/chat-widget.js" defer></script>
 
- <!-- ... contenido de la página ... -->
-
   <!-- Firebase base -->
   <script type="module" src="js/firebase.js"></script>
 
+  <!-- =========================
+     Carrito: render y lógica (BLOQUE 2 que ya tenías)
+     ========================= -->
+  <div id="cart-root" style="max-width:1100px;margin:32px auto;padding:0 16px;">
+    <h1 style="margin:8px 0 16px;">Mi Carrito</h1>
+    <div id="cart-empty" style="display:none;opacity:.8;">Tu carrito está vacío.</div>
+    <div id="cart-items"></div>
+    <div id="cart-summary" style="margin-top:16px;border-top:1px solid #e5e7eb;padding-top:12px;display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <strong>Subtotal</strong>
+        <strong id="cart-subtotal">$0.00</strong>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+        <span>Envío (estimado)</span>
+        <span id="cart-shipping">$0.00</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:18px;">
+        <strong>Total</strong>
+        <strong id="cart-total">$0.00</strong>
+      </div>
+      <button id="checkout-btn" class="btn" style="margin-top:12px;">Ir a pagar</button>
+    </div>
+  </div>
 
-  
+  <script>
+    (function () {
+      const $ = (s, c=document) => c.querySelector(s);
+      const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
+
+      const money = n => (Number(n)||0);
+      const fmt   = n => (money(n)).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+
+      function readCart() {
+        try { return JSON.parse(localStorage.getItem('cart') || '[]'); }
+        catch { return []; }
+      }
+      function writeCart(arr) {
+        localStorage.setItem('cart', JSON.stringify(arr));
+        try { if (window.updateCartCount) window.updateCartCount(); } catch {}
+      }
+
+      function removeItem(id) {
+        const cart = readCart().filter(it => String(it.id) !== String(id));
+        writeCart(cart); render();
+      }
+
+      function setQty(id, qty) {
+        const cart = readCart();
+        const idx = cart.findIndex(it => String(it.id) === String(id));
+        if (idx !== -1) {
+          cart[idx].quantity = Math.max(1, Number(qty)||1);
+          writeCart(cart); render();
+        }
+      }
+
+      function render() {
+        const box       = document.getElementById('cart-items');
+        const empty     = document.getElementById('cart-empty');
+        const summary   = document.getElementById('cart-summary');
+        const subtotalE = document.getElementById('cart-subtotal');
+        const totalE    = document.getElementById('cart-total');
+        const shippingE = document.getElementById('cart-shipping');
+
+        const cart = readCart();
+
+        if (!cart.length) {
+          box.innerHTML = '';
+          empty.style.display   = '';
+          summary.style.display = 'none';
+          writeCart(cart);
+          return;
+        }
+
+        empty.style.display   = 'none';
+        summary.style.display = '';
+
+        box.innerHTML = cart.map(it => {
+          const id    = it.id;
+          const name  = it.name || 'Producto';
+          const img   = it.image || it.img || '';
+          const price = money(it.price);
+          const qty   = Math.max(1, Number(it.quantity)||1);
+          const line  = price * qty;
+
+          return `
+            <div class="cart-row" data-id="${id}"
+                style="display:grid;grid-template-columns:92px 1fr 120px 120px 80px;gap:12px;align-items:center;border-bottom:1px solid #f3f4f6;padding:10px 0;">
+              <div style="width:92px;height:92px;overflow:hidden;border-radius:8px;border:1px solid #eee;background:#fff;">
+                ${img ? `<img src="${img}" alt="" style="width:100%;height:100%;object-fit:cover;">` : ''}
+              </div>
+              <div style="min-width:0;">
+                <div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${name}</div>
+                <div style="opacity:.8;font-size:.9rem;">ID: ${id}</div>
+              </div>
+              <div style="font-weight:600;">${fmt(price)}</div>
+              <div>
+                <input type="number" min="1" value="${qty}" class="qty-input"
+                      style="width:90px;padding:6px 8px;border:1px solid #e5e7eb;border-radius:8px;">
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end;">
+                <div style="font-weight:600;">${fmt(line)}</div>
+                <button class="remove-btn" style="background:#fee2e2;border:1px solid #fecaca;border-radius:8px;padding:6px 8px;cursor:pointer;">✕</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        const subtotal = cart.reduce((s, it) => s + money(it.price) * Math.max(1, Number(it.quantity)||1), 0);
+        const shipping = 0;
+        const total    = subtotal + shipping;
+
+        subtotalE.textContent = fmt(subtotal);
+        shippingE.textContent = fmt(shipping);
+        totalE.textContent    = fmt(total);
+
+        $$('.cart-row').forEach(row => {
+          const id = row.getAttribute('data-id');
+          const qtyInput = $('.qty-input', row);
+          const rmBtn    = $('.remove-btn', row);
+
+          qtyInput?.addEventListener('change', e => setQty(id, e.target.value));
+          rmBtn?.addEventListener('click', () => removeItem(id));
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', render);
+      } else { render(); }
+
+      window.addEventListener('storage', (e) => { if (e.key === 'cart') render(); });
+    })();
+  </script>
+
 </body>
 </html>

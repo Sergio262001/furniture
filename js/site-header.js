@@ -1,8 +1,11 @@
 // js/site-header.js
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import {
+  doc, onSnapshot,
+  getDoc, setDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-// Pequeño CSS (auto-inyectado, para no tocar style.css si no quieres)
+/* ============ CSS inline (no cambia tu style.css) ============ */
 (function injectCSS(){
   if (document.getElementById("site-header-css")) return;
   const css = `
@@ -30,17 +33,75 @@ import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/fireb
   document.head.appendChild(style);
 })();
 
-const root = document.getElementById("site-header");
+/* ============ Helpers ============ */
+// Base path para /, /pages/* y GitHub Pages (/furniture/*)
+function shBasePath() {
+  const m = location.pathname.match(/^\/(\w+)\//);
+  const repoPrefix = m ? '/' + m[1] + '/' : '/';
+  return repoPrefix;
+}
+
+// Badge global del carrito (usa quantity || cantidad)
+window.updateCartCount = function() {
+  try {
+    const cart  = JSON.parse(localStorage.getItem('cart')||'[]');
+    const count = cart.reduce((s,i)=> s + (Number(i.quantity ?? i.cantidad ?? 0)), 0);
+    const badge = document.getElementById('cart-count');
+    if (badge) badge.textContent = String(count);
+  } catch {}
+};
+window.addEventListener('storage', (e)=>{ if(e.key==='cart') window.updateCartCount(); });
+try { window.updateCartCount(); } catch {}
+
+/* 🔒 Fusiona local -> Firestore UNA SOLA VEZ por usuario (candado persistente) */
+async function mergeLocalCartToFirestore(FB) {
+  try {
+    const u = FB?.auth?.currentUser;
+    if (!u) return;
+
+    const lockKey = `CART_MERGED_ONCE_${u.uid}`; // candado persistente
+    if (localStorage.getItem(lockKey) === '1') return;
+
+    let local = [];
+    try { local = JSON.parse(localStorage.getItem('cart') || '[]'); } catch {}
+    const localCount = Array.isArray(local)
+      ? local.reduce((s,i)=> s + Number(i.quantity ?? i.cantidad ?? 0), 0)
+      : 0;
+
+    if (!localCount) { localStorage.setItem(lockKey, '1'); return; }
+
+    const ref = doc(FB.db, "carts", u.uid);
+    const snap = await getDoc(ref);
+    const remote = snap.exists() ? (snap.data().items || []) : [];
+    const remoteCount = remote.reduce((s,i)=> s + Number(i.quantity ?? i.cantidad ?? 0), 0);
+
+    // Si Firestore ya tiene cosas, no mergeamos (evita duplicados)
+    if (remoteCount > 0) {
+      localStorage.setItem(lockKey, '1');
+      return;
+    }
+
+    // Subimos local (Firestore estaba vacío)
+    await setDoc(ref, { items: local, updatedAt: serverTimestamp() });
+
+    // Rompe ciclo: limpia local y marca candado
+    localStorage.setItem('cart', '[]');
+    localStorage.setItem(lockKey, '1');
+  } catch (err) {
+    console.warn("mergeLocalCartToFirestore error", err);
+  }
+}
+
+/* ============ Render mini menú del avatar en la top-bar ============ */
 (function renderInlineMenu(){
   const topRight = document.querySelector(".top-bar > div:last-of-type");
-  const target = topRight || root || document.body;
+  const target = topRight || document.body;
   if (!document.getElementById("sh-inline-css")) {
     const style = document.createElement("style");
     style.id = "sh-inline-css";
     style.textContent = `
       .sh-dd .sh-item{color:#111 !important}
       .sh-dd .sh-item:hover{background:#f4f4f5}
-
       .sh-inline{position:relative;display:inline-block;margin-left:8px}
       .sh-userbtn{display:inline-flex;align-items:center;gap:4px;background:transparent;border:0;border-radius:999px;padding:2px 6px;cursor:pointer}
       .sh-ava{width:20px;height:20px;border-radius:50%;object-fit:cover}
@@ -60,33 +121,48 @@ const root = document.getElementById("site-header");
       <button id="shUserBtn" class="sh-userbtn" type="button" aria-haspopup="menu" aria-expanded="false">
         <img id="shAva" class="sh-ava" src="img/avatar-default.png" alt=""/>
         <span id="shName" class="muted">Account</span>
-        <svg width="12" height="12" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M5 7l5 5 5-5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
       </button>
       <div id="shDD" class="sh-dd" role="menu" aria-label="User menu">
-        <a href="account.html" class="sh-item" role="menuitem">My Account</a>
-        <a href="security.html" class="sh-item" role="menuitem">Security</a>
-</div>
+        <a href="${shBasePath()}account.html" class="sh-item" role="menuitem">My Account</a>
+        <a href="${shBasePath()}security.html" class="sh-item" role="menuitem">Security</a>
+      </div>
     </div>
   `;
   target.appendChild(holder);
 })();
 
-// === Wiring ===
+/* ============ Wiring básico ============ */
 const el = {
   cartCountLegacy: document.getElementById("cart-count"),
-  login: document.getElementById("shLogin"),
+  loginLink: document.querySelector('[data-login-link]'),
+  logoutLinks: Array.from(document.querySelectorAll('[data-logout-link]')),
   menu: document.getElementById("shMenu"),
   btn: document.getElementById("shUserBtn"),
   dd: document.getElementById("shDD"),
-  logout: document.getElementById("shLogout"),
   ava: document.getElementById("shAva"),
   name: document.getElementById("shName"),
   count: document.getElementById("shCartCount"),
 };
 
-// Espera a que window.FB exista (por si algún HTML invierte el orden accidentalmente)
+// Toggle dropdown
+document.addEventListener("click", (e) => {
+  if (el.btn && e.target.closest && e.target.closest("#shUserBtn") === el.btn) {
+    e.stopPropagation();
+    const open = el.dd.style.display === "block";
+    el.dd.style.display = open ? "none" : "block";
+    el.btn.setAttribute("aria-expanded", open ? "false" : "true");
+  } else {
+    if (el?.dd) { el.dd.style.display = "none"; el.btn?.setAttribute("aria-expanded","false"); }
+  }
+});
+
+// Avatar => My Account
+document.addEventListener('click', (e)=>{
+  const b = e.target.closest && e.target.closest('#shUserBtn');
+  if (b) { location.href = shBasePath() + 'account.html'; }
+});
+
+// Espera a que FB esté listo
 function waitForFB() {
   return new Promise((resolve) => {
     const t = setInterval(() => {
@@ -98,69 +174,71 @@ function waitForFB() {
 
 (async () => {
   const FB = await waitForFB();
-  if (!FB) return; // sin firebase.js
+  if (!FB) return;
 
-  const { auth, db, onCartSnapshot, logout } = FB;
+  const { auth, db, logout } = FB;
 
-  // Dropdown
-  el?.btn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const open = el.dd.style.display === "block";
-    el.dd.style.display = open ? "none" : "block";
-    el.btn.setAttribute("aria-expanded", open ? "false" : "true");
-  });
-  document.addEventListener("click", () => {
-    if (!el?.dd) return;
-    el.dd.style.display = "none";
-    el.btn?.setAttribute("aria-expanded", "false");
-  });
-  el?.logout?.addEventListener("click", async () => {
-    try { await logout(); } finally { location.href = "index.html"; }
-  });
+  // LOGOUT → limpia candados y redirige
+  el.logoutLinks.forEach(a => a.addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+      await logout?.();
+    } finally {
+      try {
+        Object.keys(localStorage).forEach(k => {
+          if (k.startsWith('CART_MERGED_ONCE_')) localStorage.removeItem(k);
+        });
+      } catch {}
+      location.href = shBasePath() + "index.html";
+    }
+  }));
 
   // Auth + UI
   let unsubCart = null;
   onAuthStateChanged(auth, (user) => {
-    // Reset UI
     if (unsubCart) { unsubCart(); unsubCart = null; }
     if (el.count) el.count.textContent = "0";
 
+    // Toggle login/logout en la top-bar
     if (!user) {
-      if (el.menu)  el.menu.style.display = "none";
-      if (el.login) el.login.style.display = "";
+      el.menu && (el.menu.style.display = "none");
+      el.loginLink && (el.loginLink.style.display = "");
+      el.logoutLinks.forEach(a => a.style.display = "none");
+
+      // limpia candados y refresca contador local
+      try {
+        Object.keys(localStorage).forEach(k => {
+          if (k.startsWith('CART_MERGED_ONCE_')) localStorage.removeItem(k);
+        });
+        window.updateCartCount && window.updateCartCount();
+      } catch {}
       return;
     }
 
     // Usuario logueado
-    const photo = user.photoURL || "img/avatar-default.png";
-    if (el.ava)  el.ava.src = photo;
-    if (el.name) el.name.textContent = user.displayName || user.email || "Account";
-    if (el.menu)  el.menu.style.display = "";
-    if (el.login) el.login.style.display = "none";
+    el.menu && (el.menu.style.display = "");
+    el.loginLink && (el.loginLink.style.display = "none");
+    el.logoutLinks.forEach(a => a.style.display = ""); // muestra Logout en index/topbar
 
-    // Carrito en tiempo real
-    if (typeof onCartSnapshot === "function") {
-      unsubCart = onCartSnapshot((items) => {
-        const n = Array.isArray(items) ? items.length : 0;
-        if (el.count) el.count.textContent = String(n);
-        if (el.cartCountLegacy) el.cartCountLegacy.textContent = String(n);
-      });
-    } else {
-      // fallback: doc + onSnapshot directo (por si no está el helper)
-      const ref = doc(db, "carts", user.uid);
-      unsubCart = onSnapshot(ref, (snap) => {
-        const items = snap.exists() ? (snap.data().items || []) : [];
-        if (el.count) el.count.textContent = String(items.length);
-        if (el.cartCountLegacy) el.cartCountLegacy.textContent = String(items.length);
-      });
-    }
+    el.ava && (el.ava.src = user.photoURL || "img/avatar-default.png");
+    el.name && (el.name.textContent = user.displayName || user.email || "Account");
+
+    // MERGE UNA SOLA VEZ ANTES DEL SNAPSHOT
+    mergeLocalCartToFirestore(FB);
+
+    // Snapshot Firestore -> localStorage -> contador
+    const ref = doc(db, "carts", user.uid);
+    unsubCart = onSnapshot(ref, (snap) => {
+      const items = snap.exists() ? (snap.data().items || []) : [];
+      const n = items.reduce((s, it) => s + Number(it.quantity ?? it.cantidad ?? 0), 0);
+
+      try {
+        localStorage.setItem('cart', JSON.stringify(items || []));
+        window.updateCartCount && window.updateCartCount();
+      } catch {}
+
+      if (el.count) el.count.textContent = String(n);
+      if (el.cartCountLegacy) el.cartCountLegacy.textContent = String(n);
+    });
   });
 })();
-// NAV: on click avatar button, go to account.html
-document.addEventListener('click', function(e){
-  const b = e.target.closest && e.target.closest('#shUserBtn');
-  if (b) {
-    // If you prefer dropdown instead on desktop, comment the next line:
-    location.href = 'account.html';
-  }
-});
